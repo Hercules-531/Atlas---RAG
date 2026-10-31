@@ -159,3 +159,7 @@ Implemented local PDF/DOCX/XLSX source previews, including labelled vector-PDF p
 ## Gemma 12B and uploaded media
 
 Local generation now uses the user's cached Gemma 4 12B plus its vision projector. Uploaded image/video search uses local descriptions; audio/video speech uses local Whisper transcripts. The existing text-only EmbeddingGemma 2 and hybrid index remain. Raw media stays local; cloud answers can receive minimized derived text. Added type-filtered media search, playback and bounded processing, targeted single-owner reindexing, horizontal-only search expansion, stronger paper texture, the antique map, and faster flower/video mode backgrounds. See reports/GEMMA12B-MULTIMODAL.md for actual validation and limitations.
+
+## Contextual retrieval follow-up
+
+Added bounded extractive index context for dense and BM25 retrieval, reusing original source IDs/text. Local reranking uses the same context without exposing it as generation evidence. Existing index updated in-process; no media regeneration or index-time LLM calls. Privacy is now video-only. Handy was assessed as optional companion dictation, not installed or embedded. See the contextual retrieval and Handy feasibility reports.

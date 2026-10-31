@@ -1,0 +1,222 @@
+{
+  "scope": "Existing 36 gold retrieval cases; fact retention, not generated-answer accuracy",
+  "cases": [
+    {
+      "id": "hr-0",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "hr-1",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "hr-2",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "hr-3",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "hr-4",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "hr-5",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "hr-6",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "hr-7",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "hr-8",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-0",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-1",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-2",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-3",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-4",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-5",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-6",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-7",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "contract-8",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-0",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-0",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-1",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-1",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-2",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-2",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-3",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-3",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-4",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-4",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-5",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-5",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-6",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-6",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-7",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-7",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "clinic-8",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    },
+    {
+      "id": "customer-8",
+      "first_parent_retains_fact": true,
+      "compressed_fact_retained": true,
+      "raw_canaries_in_context": 0
+    }
+  ],
+  "elapsed_seconds": 18.84400000000005
+}

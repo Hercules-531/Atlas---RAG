@@ -1,0 +1,99 @@
+{
+  "scope": "8 manufactured ambiguous-agreement fixtures; retrieval ranking only, not generated-answer accuracy",
+  "variants": {
+    "current": {
+      "dense_top1": 1,
+      "hybrid_top1": 2,
+      "cases": 8,
+      "details": [
+        {
+          "project": "Orion",
+          "dense_correct": false,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Lyra",
+          "dense_correct": false,
+          "hybrid_correct": false
+        },
+        {
+          "project": "Vela",
+          "dense_correct": false,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Cygnus",
+          "dense_correct": false,
+          "hybrid_correct": false
+        },
+        {
+          "project": "Draco",
+          "dense_correct": false,
+          "hybrid_correct": false
+        },
+        {
+          "project": "Phoenix",
+          "dense_correct": false,
+          "hybrid_correct": false
+        },
+        {
+          "project": "Auriga",
+          "dense_correct": false,
+          "hybrid_correct": false
+        },
+        {
+          "project": "Carina",
+          "dense_correct": true,
+          "hybrid_correct": false
+        }
+      ]
+    },
+    "contextual": {
+      "dense_top1": 8,
+      "hybrid_top1": 8,
+      "cases": 8,
+      "details": [
+        {
+          "project": "Orion",
+          "dense_correct": true,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Lyra",
+          "dense_correct": true,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Vela",
+          "dense_correct": true,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Cygnus",
+          "dense_correct": true,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Draco",
+          "dense_correct": true,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Phoenix",
+          "dense_correct": true,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Auriga",
+          "dense_correct": true,
+          "hybrid_correct": true
+        },
+        {
+          "project": "Carina",
+          "dense_correct": true,
+          "hybrid_correct": true
+        }
+      ]
+    }
+  }
+}

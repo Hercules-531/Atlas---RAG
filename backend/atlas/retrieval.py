@@ -5,6 +5,7 @@ from .store import rows
 from .embeddings import collection,embed
 from .privacy import terms
 from .chunking import sentences,is_record
+from .contextual import indexed_text
 
 def fuse(*rankings,k=60):
     scores={}
@@ -28,7 +29,7 @@ def retrieve(question,document_ids=None,method='hybrid',parent=True,compress=Tru
     ids=fuse(dense,lexical(question,document_ids)) if method=='hybrid' else dense
     result=[];seen=set()
     for key in ids:
-        found=rows('SELECT c.*,d.name,p.id AS parent_id,p.text AS parent_text,p.location AS parent_location FROM chunks c JOIN documents d ON d.id=c.document_id LEFT JOIN chunk_parents cp ON cp.chunk_id=c.id LEFT JOIN parents p ON p.id=cp.parent_id WHERE c.id=? AND d.status="ready"',(key,))
+        found=rows('SELECT c.*,d.name,p.id AS parent_id,p.text AS parent_text,p.location AS parent_location,cc.context AS index_context FROM chunks c JOIN documents d ON d.id=c.document_id LEFT JOIN chunk_parents cp ON cp.chunk_id=c.id LEFT JOIN parents p ON p.id=cp.parent_id LEFT JOIN chunk_contexts cc ON cc.chunk_id=c.id WHERE c.id=? AND d.status="ready"',(key,))
         if not found:continue
         item=found[0];identity=item['parent_id'] if parent and item['parent_id'] else item['id']
         if identity in seen:continue
@@ -37,6 +38,13 @@ def retrieve(question,document_ids=None,method='hybrid',parent=True,compress=Tru
             item['child_text']=item['text'];item['text']=item['parent_text'];item['location']=item['parent_location']
         result.append(item)
         if len(result)==8:break
+    # An explicit multiword source-name match narrows ambiguous agreements/versions.
+    # Names and index context remain local; evidence text is never prefixed for generation.
+    if any(c.get('index_context') for c in result):
+        from pathlib import Path
+        scores=[len(terms(Path(c['name']).stem)&terms(question)) for c in result]
+        best=max(scores,default=0)
+        if best>=2:result=[c for c,score in zip(result,scores) if score==best]
     if compress:compress_sentences(question,result,vector)
     return result
 
@@ -51,10 +59,10 @@ def compress_sentences(question,chunks,query_vector=None):
         candidates.extend((ci,i,units[i][0]) for i in ranked)
     if not candidates:return
     query=np.asarray(query_vector if query_vector is not None else embed([question],query=True)[0])
-    vectors=np.asarray(embed([text for _,_,text in candidates]))
+    vectors=np.asarray(embed([indexed_text(chunks[ci].get('index_context') or '',text) for ci,_,text in candidates]))
     scored={}
     for (ci,i,text),v in zip(candidates,vectors):
-        overlap=len(terms(text)&terms(question))/max(1,len(terms(question)))
+        overlap=len(terms(text+' '+(chunks[ci].get('index_context') or ''))&terms(question))/max(1,len(terms(question)))
         cosine=float(v@query)
         scored.setdefault(ci,[]).append((cosine*.7+overlap*.3,i,cosine,overlap))
     global_scores=sorted([(score,ci,i,cosine,overlap) for ci,values in scored.items() for score,i,cosine,overlap in values],reverse=True)

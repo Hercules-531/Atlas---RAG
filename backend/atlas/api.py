@@ -88,6 +88,11 @@ def reindex_files(request:ReindexRequest):
     # Embedded Chroma must have one owning writer process. CLI maintenance delegates here.
     return ingest.reindex(request.document_ids)
 
+@app.post('/api/retrieval/contextualize')
+def contextualize_index():
+    from .contextual import rebuild
+    return rebuild()
+
 @app.get('/api/files/{docid}/content')
 def original_source(docid:str):
     found=rows('SELECT * FROM documents WHERE id=?',(docid,))

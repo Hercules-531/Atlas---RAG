@@ -1,0 +1,8 @@
+{
+  "answer": "The governing law is Fictionland [S1].",
+  "http_status": 200,
+  "external_requests": 0,
+  "index_prefix_in_answer_payload": false,
+  "source_filename_in_answer_payload": false,
+  "removed_flower_asset_http_status": 404
+}

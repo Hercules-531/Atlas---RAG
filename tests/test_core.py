@@ -102,12 +102,12 @@ def test_csv_row_limit(tmp_path,monkeypatch):
     monkeypatch.setattr(ingest,'setting',lambda key:1 if key=='max_table_rows' else original(key))
     with pytest.raises(ValueError,match='row limit'): list(ingest.extract(p))
 
-def test_pdf_demo():
-    from atlas.demo import build
-    from atlas.config import ROOT
+def test_pdf_demo(tmp_path,monkeypatch):
+    from atlas import demo
     from pypdf import PdfReader
-    assert len(build())==36
-    assert len(PdfReader(ROOT/'demo/sources/employees.pdf').pages)==20
+    monkeypatch.setattr(demo,'ROOT',tmp_path)
+    assert len(demo.build())==36
+    assert len(PdfReader(tmp_path/'demo/sources/employees.pdf').pages)==20
 
 def test_chroma_persistence(tmp_path):
     import chromadb

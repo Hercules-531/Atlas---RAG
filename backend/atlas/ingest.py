@@ -11,6 +11,7 @@ from .config import DATA, setting
 from .store import db, rows
 from .embeddings import embed, collection
 from .chunking import parents,split_children,VERSION
+from .contextual import context_prefix,indexed_text,VERSION as CONTEXT_VERSION
 
 LOCK = threading.Lock()
 CANCELLED = set()
@@ -117,6 +118,7 @@ def ingest(docid):
         if not records or docid in CANCELLED:
             return
         path = Path(records[0]['path'])
+        source_name=records[0]['name']
         output, error = path.with_suffix('.parsed'), path.with_suffix('.error')
         process = None
         try:
@@ -143,10 +145,11 @@ def ingest(docid):
                     return
                 if docid in CANCELLED:
                     raise ValueError('Indexing cancelled')
-                vectors = embed([b[1] for b in batch])
+                vectors = embed([indexed_text(b[3],b[1]) for b in batch])
                 collection().add(ids=[b[0] for b in batch], embeddings=vectors,
                     metadatas=[{'document_id':docid} for b in batch])
                 with db() as c:
+                    c.executemany('INSERT OR REPLACE INTO chunk_contexts VALUES (?,?,?)',[(b[0],b[3],CONTEXT_VERSION) for b in batch])
                     c.executemany('INSERT INTO chunks VALUES (?,?,?,?)', [(b[0],docid,b[1],b[2]) for b in batch])
                 count += len(batch)
                 update(docid, 'embedding', progress=count)
@@ -159,7 +162,7 @@ def ingest(docid):
                     for part,start_offset,end_offset in split_children(text,embedder=embed,semantic=os.getenv('ATLAS_SEMANTIC_CHUNKING','false').lower()=='true'):
                         child_id=uuid.uuid4().hex
                         with db() as c:c.execute('INSERT INTO chunk_parents VALUES (?,?,?,?)',(child_id,parent_id,start_offset,end_offset))
-                        batch.append((child_id,part,location))
+                        batch.append((child_id,part,location,context_prefix(source_name,text,part,location)))
                         if len(batch) >= 8:
                             flush()
             flush()

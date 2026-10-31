@@ -1,0 +1,7 @@
+{
+  "gpu_observation": "NVIDIA GeForce RTX 5070 Ti Laptop GPU, 8690 MiB, 12227 MiB",
+  "system_ram_total_gib": 31.43,
+  "system_ram_available_gib": 11.5,
+  "scope": "Machine observation while Atlas is running; not a Handy benchmark or per-process attribution",
+  "handy_install_or_benchmark_performed_in_this_task": false
+}

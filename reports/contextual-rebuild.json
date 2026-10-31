@@ -1,0 +1,6 @@
+{
+  "indexed_chunks": 66,
+  "version": "extractive-index-context-v1",
+  "extra_llm_calls": 0,
+  "scope": "Index-only context; original source text, citations and history preserved"
+}

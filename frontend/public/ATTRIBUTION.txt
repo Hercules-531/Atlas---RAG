@@ -22,7 +22,9 @@ Joan Blaeu / Van der Hem, Weltkarte Atlas Blaeuw, 1662.
 Public-domain source: https://commons.wikimedia.org/wiki/File:Weltkarte_Atlas_Blaeuw.jpg
 3840px local reproduction: backgrounds/antique-map.jpg.
 
-Current Privacy scenes (user-supplied; not represented as public domain):
+Previous Privacy scene assets (user-supplied; not represented as public domain):
 glitchy flower cleared.png -> backgrounds/privacy-flower.png
 12336972-hd_1920_1028_60fps.mp4 -> backgrounds/privacy-cycle.mp4
 privacy-cycle-poster.jpg is a locally extracted first frame. These replace the older Orbit scene in the active catalog.
+
+Active Privacy scene: privacy-cycle.mp4 with privacy-cycle-poster.jpg only. The flower scene and privacy-flower.png were removed from active assets on November 1, 2026.

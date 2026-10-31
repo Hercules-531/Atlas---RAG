@@ -108,7 +108,7 @@ uv run atlas index-images
 
 The included illustrated-report.pdf is a synthetic chart example. Select it and ask “How many telescope sessions were recorded in June?” to see its original embedded chart with the cited text answer.
 
-The product display name comes from config/app.toml and is now **Atlas**. Side panels animate in and out over 240 ms; the paper is warmer brown/mustard. Privacy mode crossfades to the supplied Orbit-study(4).gif animation, locally converted to a pausable MP4 with a static first-frame poster. The original GIF is retained locally in the project assets. Local mode crossfades every 18 seconds among a 1662 Blaeu world map, Wanderer above the Sea of Fog and Water Lilies, retaining the texture of the original public-domain reproductions. Mode/gallery fades take 0.9 seconds. Artwork attribution is in frontend/public/ATTRIBUTION.txt. Reduced motion stops autoplay and uses the static poster; visibility handlers pause playback/rotation when hidden. Backgrounds are served locally, never hotlinked.
+The product display name comes from config/app.toml and is now **Atlas**. Side panels animate in and out over 240 ms; the paper is warmer brown/mustard. Privacy mode crossfades to the supplied night-sky video, with a static first-frame poster for reduced motion. Local mode crossfades every 18 seconds among a 1662 Blaeu world map, Wanderer above the Sea of Fog and Water Lilies, retaining the texture of the original public-domain reproductions. Mode/gallery fades take 0.9 seconds. Artwork attribution is in frontend/public/ATTRIBUTION.txt. Reduced motion stops autoplay and uses the static poster; visibility handlers pause playback/rotation when hidden. Backgrounds are served locally, never hotlinked.
 
 See reports/SOURCE-IMAGES-AND-BACKGROUNDS.md for measured validation. Prior evaluation reports remain historical; no new cloud-answer accuracy or cost claim is inferred from this feature.
 
@@ -138,6 +138,17 @@ Reindexing while the app is running delegates to its owning process (`POST /api/
 
 ## Current background and paper behavior
 
-The first Local scene is a high-resolution Joan Blaeu world map (1662), replacing Van Gogh in the carousel. Rotation is now **18 seconds**, with **900 ms** crossfades—half the previous interval and fade time. Privacy alternates the supplied glitchy flower on OLED black with the supplied night-sky video. The flower is positioned behind the ask bar. Reduced motion stops automatic cycling/video. The search bar changes width only; its height remains 52 px. The paper now uses a more visible neutral fiber texture blended with the warm paper theme.
+The first Local scene is a high-resolution Joan Blaeu world map (1662), replacing Van Gogh in the carousel. Rotation is now **18 seconds**, with **900 ms** crossfades—half the previous interval and fade time. Privacy now uses only the supplied night-sky video; the flower scene and its active asset have been removed. Reduced motion stops automatic cycling/video. The search bar changes width only; its height remains 52 px. The paper now uses a more visible neutral fiber texture blended with the warm paper theme.
 
 See reports/GEMMA12B-MULTIMODAL.md for measured checks. Earlier reports describe earlier implementations and were not reinterpreted as new accuracy/cost measurements.
+
+
+## Contextual retrieval
+
+Atlas now enriches the **local index** with bounded, extractive document/section context before both vector embedding and BM25 indexing. This is distinct from the existing contextual compressor and parent-child retriever. The context includes a local document title, source location, existing section opening or table field names. It is capped at 80 words and requires **no extra LLM calls**. It is not an LLM-generated document summary.
+
+Original chunk text, source IDs, citations and history remain unchanged. Index context is stored separately in local SQLite and is used for local search/reranking only; it is never automatically added to model evidence. Exact multiword source-name matches can narrow ambiguous retrieved documents. The existing privacy/consent pipeline still processes original evidence.
+
+New uploads use context automatically. Existing indexed files were updated in the owning app process without reparsing or regenerating media captions/transcripts. For maintenance, POST to `/api/retrieval/contextualize` while the app is running. See reports/CONTEXTUAL-RETRIEVAL.md and the reproducible `uv run python -m atlas.contextual_benchmark` stress ablation. The narrow stress improvement is not a fresh generated-answer accuracy score.
+
+Privacy mode now has **video only**, with a static video poster for reduced motion. Local mode's painting/map carousel is unchanged.

@@ -1,0 +1,12 @@
+{
+  "active_scene": "privacy-video",
+  "flower_dom_nodes": 0,
+  "video_source": "/backgrounds/privacy-cycle.mp4",
+  "video_playback_observed": true,
+  "reduced_motion": {
+    "video_paused": true,
+    "video_hidden": true,
+    "playback_resumed_after_restore": true
+  },
+  "note": "Observed through actual browser interactions; no Handy installation or microphone capture performed."
+}

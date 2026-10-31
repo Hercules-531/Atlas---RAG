@@ -28,11 +28,16 @@ def init():
         CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY,value TEXT);
         CREATE TABLE IF NOT EXISTS parents(id TEXT PRIMARY KEY,document_id TEXT,text TEXT,location TEXT);
         CREATE TABLE IF NOT EXISTS chunk_parents(chunk_id TEXT PRIMARY KEY,parent_id TEXT,start_offset INTEGER,end_offset INTEGER);
+        CREATE TABLE IF NOT EXISTS chunk_contexts(chunk_id TEXT PRIMARY KEY,context TEXT,version TEXT);
         CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(chunk_id UNINDEXED,text,document_id UNINDEXED);
-        CREATE TRIGGER IF NOT EXISTS chunk_fts_insert AFTER INSERT ON chunks BEGIN
-          INSERT INTO chunks_fts(chunk_id,text,document_id) VALUES(new.id,new.text,new.document_id); END;
+        DROP TRIGGER IF EXISTS chunk_fts_insert;
+        CREATE TRIGGER chunk_fts_insert AFTER INSERT ON chunks BEGIN
+          INSERT INTO chunks_fts(chunk_id,text,document_id) VALUES(new.id,
+            COALESCE((SELECT 'Index context: ' || context || char(10) || char(10) FROM chunk_contexts WHERE chunk_id=new.id),'') || new.text,new.document_id); END;
+        DROP TRIGGER IF EXISTS chunk_fts_delete;
         CREATE TRIGGER IF NOT EXISTS chunk_fts_delete AFTER DELETE ON chunks BEGIN
           DELETE FROM chunks_fts WHERE chunk_id=old.id;
+          DELETE FROM chunk_contexts WHERE chunk_id=old.id;
           DELETE FROM chunk_parents WHERE chunk_id=old.id; END;
         CREATE TRIGGER IF NOT EXISTS parent_children_delete AFTER DELETE ON parents BEGIN
           DELETE FROM chunk_parents WHERE parent_id=old.id; END;
