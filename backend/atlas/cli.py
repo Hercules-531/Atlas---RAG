@@ -7,7 +7,7 @@ from .config import ROOT, directories
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument('command',choices=['dev','serve','setup-models','demo','eval'])
+    parser.add_argument('command',choices=['dev','serve','setup-models','demo','eval','reindex'])
     parser.add_argument('--live',action='store_true')
     parser.add_argument('--synthetic-full-context',action='store_true')
     parser.add_argument('--resume',action='store_true')
@@ -37,6 +37,10 @@ def main():
                     wheel.write_bytes(response.read())
                 print('Compatible NER download failed; using official 3.7.1 fallback with a spaCy compatibility warning.')
                 subprocess.run(['uv','pip','install','--python',sys.executable,'--no-deps',str(wheel)],check=True)
+    elif args.command=='reindex':
+        from .ingest import reindex
+        from .store import init
+        init();print(json.dumps(reindex(),indent=2))
     elif args.command=='demo':
         from .demo import build
         build(); print('Synthetic demo datasets generated')

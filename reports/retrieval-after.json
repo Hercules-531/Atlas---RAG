@@ -1,0 +1,260 @@
+{
+  "method": "sentence-aware child chunks + hybrid BM25/dense + bounded parent expansion + local semantic extractive compressor",
+  "cases": [
+    {
+      "id": "hr-0",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "hr-1",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "hr-2",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "hr-3",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "hr-4",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "hr-5",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "hr-6",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "hr-7",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "hr-8",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-0",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-1",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-2",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-3",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-4",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-5",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-6",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-7",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "contract-8",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-0",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-0",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-1",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-1",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-2",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-2",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-3",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-3",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-4",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-4",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-5",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-5",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-6",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-6",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-7",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-7",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "clinic-8",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    },
+    {
+      "id": "customer-8",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "compressed_fact": true,
+      "raw_canary_leaks": []
+    }
+  ],
+  "elapsed_seconds": 25.844000000011874,
+  "scope": "retrieval/fact retention only, not generated-answer accuracy",
+  "note": "Semantic topic-boundary splitting tested separately and disabled by default: no incremental stress-test benefit over sentence boundaries."
+}

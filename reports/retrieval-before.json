@@ -1,0 +1,222 @@
+{
+  "method": "dense-only, original 300-word/40-word-overlap chunks",
+  "cases": [
+    {
+      "id": "hr-0",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 1.7029999999940628
+    },
+    {
+      "id": "hr-1",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.062000000005355105
+    },
+    {
+      "id": "hr-2",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "hr-3",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "hr-4",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.062000000005355105
+    },
+    {
+      "id": "hr-5",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "hr-6",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "hr-7",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "hr-8",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "contract-0",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046000000002095476
+    },
+    {
+      "id": "contract-1",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "contract-2",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.06300000000919681
+    },
+    {
+      "id": "contract-3",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "contract-4",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "contract-5",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.062000000005355105
+    },
+    {
+      "id": "contract-6",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "contract-7",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "contract-8",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "clinic-0",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.062000000005355105
+    },
+    {
+      "id": "customer-0",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "clinic-1",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.0629999999946449
+    },
+    {
+      "id": "customer-1",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046000000002095476
+    },
+    {
+      "id": "clinic-2",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.0629999999946449
+    },
+    {
+      "id": "customer-2",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "clinic-3",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "customer-3",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "clinic-4",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "customer-4",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.0629999999946449
+    },
+    {
+      "id": "clinic-5",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046000000002095476
+    },
+    {
+      "id": "customer-5",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "clinic-6",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.062000000005355105
+    },
+    {
+      "id": "customer-6",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "clinic-7",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.06300000000919681
+    },
+    {
+      "id": "customer-7",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046999999991385266
+    },
+    {
+      "id": "clinic-8",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.04700000000593718
+    },
+    {
+      "id": "customer-8",
+      "top1_fact": true,
+      "recall_at_8": true,
+      "seconds": 0.046000000002095476
+    }
+  ],
+  "elapsed_seconds": 3.5460000000020955
+}

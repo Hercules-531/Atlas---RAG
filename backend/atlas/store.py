@@ -26,7 +26,21 @@ def init():
         CREATE TABLE IF NOT EXISTS history(id TEXT PRIMARY KEY,created REAL,question TEXT,mode TEXT,result TEXT);
         CREATE TABLE IF NOT EXISTS budgets(session TEXT PRIMARY KEY,tokens INTEGER);
         CREATE TABLE IF NOT EXISTS settings(key TEXT PRIMARY KEY,value TEXT);
+        CREATE TABLE IF NOT EXISTS parents(id TEXT PRIMARY KEY,document_id TEXT,text TEXT,location TEXT);
+        CREATE TABLE IF NOT EXISTS chunk_parents(chunk_id TEXT PRIMARY KEY,parent_id TEXT,start_offset INTEGER,end_offset INTEGER);
+        CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(chunk_id UNINDEXED,text,document_id UNINDEXED);
+        CREATE TRIGGER IF NOT EXISTS chunk_fts_insert AFTER INSERT ON chunks BEGIN
+          INSERT INTO chunks_fts(chunk_id,text,document_id) VALUES(new.id,new.text,new.document_id); END;
+        CREATE TRIGGER IF NOT EXISTS chunk_fts_delete AFTER DELETE ON chunks BEGIN
+          DELETE FROM chunks_fts WHERE chunk_id=old.id;
+          DELETE FROM chunk_parents WHERE chunk_id=old.id; END;
+        CREATE TRIGGER IF NOT EXISTS parent_children_delete AFTER DELETE ON parents BEGIN
+          DELETE FROM chunk_parents WHERE parent_id=old.id; END;
         ''')
+        if not c.execute('SELECT 1 FROM settings WHERE key="fts_initialized"').fetchone():
+            c.execute('DELETE FROM chunks_fts')
+            c.execute('INSERT INTO chunks_fts(chunk_id,text,document_id) SELECT id,text,document_id FROM chunks')
+            c.execute('INSERT INTO settings VALUES ("fts_initialized","1")')
 
 def reserve(session, tokens, limit):
     if tokens <= 0 or tokens > limit:

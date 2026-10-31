@@ -19,11 +19,22 @@ def start():
     override=os.getenv('ATLAS_LOCAL_GGUF')
     llm=Path(override) if override else next(iter(candidates),None)
     embed=DATA/'models/embeddinggemma-2-F32.gguf'
-    for port,path,extra in [(8767,embed,['--embeddings','--pooling','mean','-ngl','0','--cache-type-k','f32','--cache-type-v','f32']),
-                             (8766,llm,['-ngl','99'])]:
+    env=os.environ.copy()
+    cuda_lib=Path.home()/'.unsloth/studio/unsloth_studio/Lib/site-packages/torch/lib'
+    if cuda_lib.exists():
+        env['PATH']=str(cuda_lib)+os.pathsep+env.get('PATH','')
+    try:
+        devices=subprocess.run([str(binary),'--list-devices'],env=env,capture_output=True,text=True,timeout=15)
+        gpu='CUDA0' in devices.stdout+devices.stderr
+    except subprocess.TimeoutExpired:
+        gpu=False
+        print('CUDA discovery timed out; using local CPU inference.',flush=True)
+    print('Local generation device: '+('CUDA0 (dedicated NVIDIA GPU)' if gpu else 'CPU; CUDA runtime unavailable'),flush=True)
+    for port,path,extra in [(8767,embed,['--embeddings','--pooling','mean','--device','none','-ngl','0','--cache-type-k','f32','--cache-type-v','f32']),
+                             (8766,llm,['--device','CUDA0','-ngl','99'] if gpu else ['-ngl','0'])]:
         if listening(port) or path is None or not path.exists(): continue
         log=(DATA/f'model-{port}.log').open('w',encoding='utf-8')
         command=[str(binary),'-m',str(path),'--host','127.0.0.1','--port',str(port),'-c','8192','--parallel','1','--no-warmup']+extra
-        process=subprocess.Popen(command,stdout=log,stderr=log,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
+        process=subprocess.Popen(command,stdout=log,stderr=log,env=env,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
         atexit.register(lambda p=process: p.terminate() if p.poll() is None else None)
         print(f'Local model server {port}: {path.name}',flush=True)

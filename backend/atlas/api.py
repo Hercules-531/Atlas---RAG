@@ -3,6 +3,7 @@ import json
 import threading
 import time
 import uuid
+import mimetypes
 from pathlib import Path
 from typing import Literal
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request
@@ -60,6 +61,21 @@ def config():
 def files():
     return rows('SELECT id,name,status,error,progress FROM documents ORDER BY rowid DESC')
 
+@app.get('/api/files/{docid}/content')
+def original_source(docid:str):
+    found=rows('SELECT * FROM documents WHERE id=?',(docid,))
+    if not found:raise HTTPException(404,'Source file was deleted or is unavailable')
+    item=found[0];path=Path(item['path']).resolve()
+    if path.parent!=(DATA/'uploads').resolve() or not path.is_file():raise HTTPException(404,'Source file unavailable')
+    return FileResponse(path,media_type=mimetypes.guess_type(item['name'])[0] or 'application/octet-stream',filename=item['name'],content_disposition_type='inline')
+
+@app.get('/api/sources/{chunkid}')
+def source_chunk(chunkid:str):
+    found=rows('SELECT c.*,d.name,p.text AS parent_text,p.location AS parent_location FROM chunks c JOIN documents d ON c.document_id=d.id LEFT JOIN chunk_parents cp ON cp.chunk_id=c.id LEFT JOIN parents p ON p.id=cp.parent_id WHERE c.id=? AND d.status="ready"',(chunkid,))
+    if not found:raise HTTPException(404,'Evidence no longer indexed; original-file links remain available')
+    item=found[0]
+    return {'document_id':item['document_id'],'name':item['name'],'location':item['parent_location'] or item['location'],'text':item['parent_text'] or item['text']}
+
 @app.post('/api/files')
 async def upload(file:UploadFile=File(...)):
     directories(); docid=uuid.uuid4().hex
@@ -104,6 +120,7 @@ def _delete_file(docid):
         found=rows('SELECT path FROM documents WHERE id=?',(docid,))
         with db() as c:
             c.execute('DELETE FROM documents WHERE id=?',(docid,)); c.execute('DELETE FROM chunks WHERE document_id=?',(docid,))
+            c.execute('DELETE FROM parents WHERE document_id=?',(docid,))
             # History and audit may contain information derived from this document.
             c.execute('DELETE FROM history'); c.execute('DELETE FROM budgets')
         for item in found:

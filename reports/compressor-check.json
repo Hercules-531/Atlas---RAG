@@ -1,0 +1,218 @@
+[
+  {
+    "id": "hr-0",
+    "retained": true,
+    "sent_estimate": 30,
+    "raw_canary": false
+  },
+  {
+    "id": "hr-1",
+    "retained": true,
+    "sent_estimate": 62,
+    "raw_canary": false
+  },
+  {
+    "id": "hr-2",
+    "retained": true,
+    "sent_estimate": 62,
+    "raw_canary": false
+  },
+  {
+    "id": "hr-3",
+    "retained": true,
+    "sent_estimate": 16,
+    "raw_canary": false
+  },
+  {
+    "id": "hr-4",
+    "retained": true,
+    "sent_estimate": 17,
+    "raw_canary": false
+  },
+  {
+    "id": "hr-5",
+    "retained": true,
+    "sent_estimate": 19,
+    "raw_canary": false
+  },
+  {
+    "id": "hr-6",
+    "retained": true,
+    "sent_estimate": 17,
+    "raw_canary": false
+  },
+  {
+    "id": "hr-7",
+    "retained": true,
+    "sent_estimate": 14,
+    "raw_canary": false
+  },
+  {
+    "id": "hr-8",
+    "retained": true,
+    "sent_estimate": 31,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-0",
+    "retained": true,
+    "sent_estimate": 13,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-1",
+    "retained": true,
+    "sent_estimate": 12,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-2",
+    "retained": true,
+    "sent_estimate": 13,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-3",
+    "retained": true,
+    "sent_estimate": 13,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-4",
+    "retained": true,
+    "sent_estimate": 13,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-5",
+    "retained": true,
+    "sent_estimate": 23,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-6",
+    "retained": true,
+    "sent_estimate": 13,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-7",
+    "retained": true,
+    "sent_estimate": 13,
+    "raw_canary": false
+  },
+  {
+    "id": "contract-8",
+    "retained": true,
+    "sent_estimate": 11,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-0",
+    "retained": true,
+    "sent_estimate": 36,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-0",
+    "retained": true,
+    "sent_estimate": 37,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-1",
+    "retained": true,
+    "sent_estimate": 25,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-1",
+    "retained": true,
+    "sent_estimate": 24,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-2",
+    "retained": true,
+    "sent_estimate": 25,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-2",
+    "retained": true,
+    "sent_estimate": 24,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-3",
+    "retained": true,
+    "sent_estimate": 36,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-3",
+    "retained": true,
+    "sent_estimate": 37,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-4",
+    "retained": true,
+    "sent_estimate": 25,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-4",
+    "retained": true,
+    "sent_estimate": 24,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-5",
+    "retained": true,
+    "sent_estimate": 25,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-5",
+    "retained": true,
+    "sent_estimate": 24,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-6",
+    "retained": true,
+    "sent_estimate": 36,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-6",
+    "retained": true,
+    "sent_estimate": 37,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-7",
+    "retained": true,
+    "sent_estimate": 25,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-7",
+    "retained": true,
+    "sent_estimate": 24,
+    "raw_canary": false
+  },
+  {
+    "id": "clinic-8",
+    "retained": true,
+    "sent_estimate": 25,
+    "raw_canary": false
+  },
+  {
+    "id": "customer-8",
+    "retained": true,
+    "sent_estimate": 24,
+    "raw_canary": false
+  }
+]

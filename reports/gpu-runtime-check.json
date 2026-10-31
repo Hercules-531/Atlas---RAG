@@ -1,0 +1,17 @@
+{
+  "answer": "The annual leave entitlement is 24 days [S1].",
+  "elapsed_seconds": 2.0939999999973224,
+  "external_requests": 0,
+  "requested_model": "gemma-4-E4B-it-qat",
+  "observed_usage": {
+    "completion_tokens": 14,
+    "prompt_tokens": 110,
+    "total_tokens": 124,
+    "prompt_tokens_details": {
+      "cached_tokens": 105
+    }
+  },
+  "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU, 2968 MiB, 12227 MiB",
+  "generation_device": "CUDA0 explicitly selected; Unsloth CUDA dependencies supplied to child process",
+  "embedding_device": "CPU with F32 weights and KV types"
+}

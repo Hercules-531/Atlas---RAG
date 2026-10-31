@@ -146,3 +146,7 @@ README covers setup, env vars, larger configurable limits, model downloads, loca
 Risks: free-quota exhaustion, embedding/runtime compatibility, absent live signatures, ingestion duration on large files, and imperfect retrieval/PII detection. Mitigate through resumption, BF16/FP32 validation, explicit verification states, bounded ingestion, and abstention. Neither retrieval nor detection guarantees privacy; local vectors and logs are sensitive; Prune sees approved transmitted content.
 
 Hindi retrieval is a final ten-minute stretch only. Voice, hosted deployment, and agent loops are outside this build.
+
+## Follow-up retrieval and UI refinement
+
+Implemented local hybrid BM25/dense search, bounded parent-child retrieval, sentence-aware chunking with optional semantic breakpoints, semantic extractive compression, CUDA0 generation using existing Unsloth runtime dependencies, and the user-directed OLED/glass/paper interface with local linked source navigation. See reports/RETRIEVAL-UPGRADE.md for measured retention/stress results and limits. Late chunking remains intentionally unimplemented because no measured benefit justified a token-level pooling runtime change. Existing uploads were reindexed locally; user source files were preserved.

@@ -1,0 +1,20 @@
+{
+  "search_width_px": {
+    "compact": 483.8,
+    "focused": 590
+  },
+  "citation_click": {
+    "source_opened": true,
+    "hash": "#source-S1",
+    "original_pdf_page_anchor": true,
+    "original_pdf_http_status": 200,
+    "original_pdf_content_type": "application/pdf"
+  },
+  "wheel_scroll": {
+    "up_zoom_observed": 1.089671566637491,
+    "up_collapsed_answer": true,
+    "down_expanded_answer": true
+  },
+  "final_source_count_for_single_cited_answer": 1,
+  "verification": "Actual Playwright UI interactions and local HTTP checks; not a fabricated performance benchmark"
+}

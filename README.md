@@ -1,6 +1,6 @@
 # Atlas-RAG
 
-**Minimum necessary, with proof.** Ask questions across local PDF, DOCX, TXT, MD, CSV, XLSX and JSON documents. EmbeddingGemma 2 generates embeddings locally; embedded persistent Chroma stores and searches them locally. Inspect exactly what the application sends through Prune, and what it withholds.
+**Minimum necessary, with proof.** Ask questions across local PDF, DOCX, TXT, MD, CSV, XLSX and JSON documents. EmbeddingGemma 2 generates embeddings locally; embedded persistent Chroma plus SQLite BM25 provide local hybrid retrieval. Sentence-aware children retrieve bounded parents, and a local semantic extractive compressor selects evidence before the privacy pipeline. Inspect exactly what the application sends through Prune, and what it withholds.
 
 ## Run on this machine
 
@@ -23,7 +23,7 @@ Use **Load demo data** in Add documents. Wait for files to become ready. Select 
 
 The launcher detects the existing Unsloth llama.cpp runtime under `~/.unsloth/llama.cpp/build/bin/Release/` and cached `gemma-4-E4B-it-qat-UD-Q4_K_XL.gguf` weights. It never downloads an LLM automatically.
 
-- Generation: existing Gemma 4 E4B, loopback port **8766**.
+- Generation: existing Gemma 4 E4B, loopback port **8766**, explicitly offloaded to **CUDA0** when available. The launcher adds existing Unsloth CUDA DLLs to the child process search path; it does not change the machine-wide PATH. Missing CUDA falls back locally to CPU and logs that state.
 - Embeddings: existing EmbeddingGemma 2 GGUF converted locally to **F32**, CPU inference with F32 KV types, loopback port **8767**. This text-only model has 768-dimensional outputs; vectors are validated and normalized.
 - Conversion from cached F16 weights to F32 avoids FP16 runtime arithmetic but **does not recover any precision already lost in the source weights**. Retrieval quality must be measured. Source weights are left untouched.
 - Without compatible cached GGUF/runtime assets, `setup-models` downloads the official SentenceTransformers model; unused vision/audio encoders are disabled during load. Inference uses BF16 where supported or FP32. No FP16 or remote embedding fallback.
@@ -75,3 +75,20 @@ Requests reserve session budgets atomically. The exact body is persisted before 
 Retrieval and sensitivity detectors can miss information. Regex/NER/field heuristics are not comprehensive classification or legal compliance. Semantic selection is heuristic, and the app can abstain or answer incorrectly. Prompt injection defenses are instruction separation and constrained evidence, not a guarantee. There is no OS-level sandbox for model servers or parsers. Gemini free quota and Prune availability can prevent evaluation completion. The painting uses slow CSS transforms rather than a WebGL swirling shader; reduced motion and hidden-tab pause are supported. Performance must be measured on the target machine.
 
 See [PLAN.md](PLAN.md), [demo script](docs/demo-script.md), [pitch](docs/pitch.md), and the [artwork attribution](frontend/public/ATTRIBUTION.txt).
+
+
+## Retrieval upgrade and source navigation
+
+Original prose chunks were 300-word windows with 40-word overlap; table rows stayed intact. The current default preserves sentence boundaries, targets at most 240 words per child, retains a short sentence overlap, and stores bounded prose parents (around 900 words). JSON/table rows are never merged with other records. PDF page boundaries are retained. Long individual sentences are still bounded.
+
+- **Hybrid search:** local Chroma dense candidates and SQLite FTS5 BM25 candidates are fused using reciprocal rank fusion (k=60), with ready-state/document scope filtering before returning evidence.
+- **Parent-child retrieval:** search small child vectors, deduplicate parents, and expand their text locally. Parent expansion never automatically sends a parent to the cloud; the existing privacy and prompt-budget gates still apply.
+- **Contextual compressor:** local embedding similarity plus lexical relevance ranks sentences globally. It extracts original spans rather than generating summaries; short antecedent context is retained for pronoun-led sentences. No additional LLM calls or paid inference.
+- **Semantic chunking:** an optional `ATLAS_SEMANTIC_CHUNKING=true` enables local embedding-based topic breakpoints during indexing. It remains off by default because the measured stress cases showed no incremental coverage over sentence-aware boundaries.
+- **Late chunking:** not implemented. The current GGUF embedding endpoint returns pooled vectors, while late chunking needs token-level contextual embeddings and pooling by span. No measured benefit justified replacing that runtime.
+
+Run `uv run atlas reindex` while the app/local embedding server is running to rebuild existing indexes without deleting original uploads or prior receipts. New uploads use the new strategy automatically. Prior history preserves its embedded evidence; old chunk links can expire across reindexing, while original-file links remain available until deletion.
+
+`uv run python -m atlas.retrieval_benchmark` reproduces the eight manufactured boundary/rare-ID stress fixtures. See `reports/retrieval-before.json`, `reports/retrieval-after.json`, `reports/retrieval-stress.json`, and `reports/compressor-check.json`. These are retrieval and evidence-retention measurements, not a fresh generated-answer accuracy evaluation. The earlier 72-call cloud evaluation remains a historical result for the preceding implementation.
+
+Answer citations are keyboard-accessible links to local evidence cards. Each card opens the original local file; PDFs include a page anchor. File IDs are resolved through the local registry and paths are restricted to the uploads directory. The UI uses OLED-black panels, static glass materials, a compact focus-expanding search bar, and a textured paper answer surface. Scroll/wheel or drag the answer handle to reveal it; scroll its contents normally, or reverse at the top to dismiss. Background zoom follows scroll intent, pauses when hidden, and respects reduced motion. No fresh compositor-FPS claim is made.

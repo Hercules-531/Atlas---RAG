@@ -1,0 +1,287 @@
+{
+  "scope": "8 manufactured long-sentence/rare-ID boundary stress fixtures; not representative answer accuracy",
+  "variants": {
+    "fixed-dense": {
+      "child_coverage_at_1": 0,
+      "parent_coverage_at_1": 8,
+      "cases": 8,
+      "details": [
+        {
+          "code": "ZQX-100",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-101",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-102",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-103",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-104",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-105",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-106",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-107",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        }
+      ]
+    },
+    "fixed-hybrid": {
+      "child_coverage_at_1": 0,
+      "parent_coverage_at_1": 8,
+      "cases": 8,
+      "details": [
+        {
+          "code": "ZQX-100",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-101",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-102",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-103",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-104",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-105",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-106",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-107",
+          "child_contains_identifier_and_fact": false,
+          "parent_contains_identifier_and_fact": true
+        }
+      ]
+    },
+    "sentence-dense": {
+      "child_coverage_at_1": 8,
+      "parent_coverage_at_1": 8,
+      "cases": 8,
+      "details": [
+        {
+          "code": "ZQX-100",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-101",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-102",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-103",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-104",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-105",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-106",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-107",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        }
+      ]
+    },
+    "sentence-hybrid": {
+      "child_coverage_at_1": 8,
+      "parent_coverage_at_1": 8,
+      "cases": 8,
+      "details": [
+        {
+          "code": "ZQX-100",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-101",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-102",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-103",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-104",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-105",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-106",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-107",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        }
+      ]
+    },
+    "semantic-dense": {
+      "child_coverage_at_1": 8,
+      "parent_coverage_at_1": 8,
+      "cases": 8,
+      "details": [
+        {
+          "code": "ZQX-100",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-101",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-102",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-103",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-104",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-105",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-106",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-107",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        }
+      ]
+    },
+    "semantic-hybrid": {
+      "child_coverage_at_1": 8,
+      "parent_coverage_at_1": 8,
+      "cases": 8,
+      "details": [
+        {
+          "code": "ZQX-100",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-101",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-102",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-103",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-104",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-105",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-106",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        },
+        {
+          "code": "ZQX-107",
+          "child_contains_identifier_and_fact": true,
+          "parent_contains_identifier_and_fact": true
+        }
+      ]
+    }
+  }
+}

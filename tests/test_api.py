@@ -60,3 +60,23 @@ def test_cancel_updates_status(client):
     with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('cancel-me','file.txt','unused','queued'))
     assert client.post('/api/files/cancel-me/cancel').status_code==200
     assert store.rows('SELECT status FROM documents WHERE id="cancel-me"')[0]['status']=='cancelled'
+
+def test_original_source_is_local_and_inline(client,tmp_path):
+    path=tmp_path/'uploads/source.pdf';path.write_bytes(b'%PDF-synthetic-test')
+    with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('source','source.pdf',str(path),'ready'))
+    response=client.get('/api/files/source/content')
+    assert response.status_code==200 and 'inline' in response.headers['content-disposition']
+    assert response.content==b'%PDF-synthetic-test'
+
+def test_source_cannot_escape_upload_directory(client,tmp_path):
+    path=tmp_path/'outside.txt';path.write_text('not an upload')
+    with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('outside','outside.txt',str(path),'ready'))
+    assert client.get('/api/files/outside/content').status_code==404
+
+def test_source_endpoint_returns_parent_evidence(client):
+    with store.db() as c:
+        c.execute('INSERT INTO documents(id,name,status) VALUES (?,?,?)',('pdoc','policy.txt','ready'))
+        c.execute('INSERT INTO parents VALUES (?,?,?,?)',('parent','pdoc','Full parent evidence.','line 1 – line 3'))
+        c.execute('INSERT INTO chunks VALUES (?,?,?,?)',('child','pdoc','child text','line 2'))
+        c.execute('INSERT INTO chunk_parents VALUES (?,?,?,?)',('child','parent',0,10))
+    assert client.get('/api/sources/child').json()['text']=='Full parent evidence.'

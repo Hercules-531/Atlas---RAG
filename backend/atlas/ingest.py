@@ -1,6 +1,7 @@
 import csv
 import json
 import multiprocessing as mp
+import os
 import re
 import threading
 import uuid
@@ -9,6 +10,7 @@ from pathlib import Path
 from .config import DATA, setting
 from .store import db, rows
 from .embeddings import embed, collection
+from .chunking import parents,split_children,VERSION
 
 LOCK = threading.Lock()
 CANCELLED = set()
@@ -140,15 +142,14 @@ def ingest(docid):
                 update(docid, 'embedding', progress=count)
                 batch.clear()
             with output.open(encoding='utf-8') as f:
-                for line in f:
-                    text, location = json.loads(line)
-                    if text.lstrip().startswith('{'):
-                        parts = [text]
-                    else:
-                        words = text.split()
-                        parts = [' '.join(words[i:i+300]) for i in range(0,len(words),260)]
-                    for part in parts:
-                        batch.append((uuid.uuid4().hex,part,location))
+                records=(json.loads(line) for line in f)
+                for text, location in parents(records):
+                    parent_id=uuid.uuid4().hex
+                    with db() as c:c.execute('INSERT INTO parents VALUES (?,?,?,?)',(parent_id,docid,text,location))
+                    for part,start_offset,end_offset in split_children(text,embedder=embed,semantic=os.getenv('ATLAS_SEMANTIC_CHUNKING','false').lower()=='true'):
+                        child_id=uuid.uuid4().hex
+                        with db() as c:c.execute('INSERT INTO chunk_parents VALUES (?,?,?,?)',(child_id,parent_id,start_offset,end_offset))
+                        batch.append((child_id,part,location))
                         if len(batch) >= 8:
                             flush()
             flush()
@@ -157,6 +158,7 @@ def ingest(docid):
             update(docid, 'error', str(exc))
             with db() as c:
                 c.execute('DELETE FROM chunks WHERE document_id=?',(docid,))
+                c.execute('DELETE FROM parents WHERE document_id=?',(docid,))
             try:
                 collection().delete(where={'document_id':docid})
             except Exception:
@@ -164,7 +166,7 @@ def ingest(docid):
         finally:
             output.unlink(missing_ok=True); error.unlink(missing_ok=True)
 
-def retrieve(question, document_ids=None):
+def retrieve_dense_legacy(question, document_ids=None):
     query = collection().query(query_embeddings=embed([question], query=True), n_results=8,
         **({'where':{'document_id':{'$in':document_ids}}} if document_ids else {}))
     result = []
@@ -173,3 +175,22 @@ def retrieve(question, document_ids=None):
         if found:
             result.append(found[0])
     return result
+
+def retrieve(question,document_ids=None):
+    from .retrieval import retrieve as hybrid
+    return hybrid(question,document_ids)
+
+def reindex():
+    """Rebuild only the index; preserve uploaded originals and prior receipts/history."""
+    documents=rows('SELECT id FROM documents WHERE status IN ("ready","error")')
+    for document in documents:
+        docid=document['id'];CANCELLED.discard(docid)
+        with LOCK:
+            update(docid,'queued')
+            collection().delete(where={'document_id':docid})
+            with db() as c:
+                c.execute('DELETE FROM chunks WHERE document_id=?',(docid,))
+                c.execute('DELETE FROM parents WHERE document_id=?',(docid,))
+        ingest(docid)
+    with db() as c:c.execute('INSERT OR REPLACE INTO settings VALUES (?,?)',('chunking_version',VERSION))
+    return rows('SELECT name,status,error,progress FROM documents')

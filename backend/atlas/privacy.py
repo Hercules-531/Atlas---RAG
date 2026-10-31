@@ -135,9 +135,9 @@ def minimize(question,chunks,use_ner=True):
                     selected.append(f'{key}: {masked}'); needed.extend(cats)
                 sent_fields+=1
         else:
-            sentences=re.split(r'(?<=[.!?])\s+|\n',text)
+            sentences=chunk.get('sentence_units') or re.split(r'(?<=[.!?])\s+|\n',text)
             ranked=sorted(enumerate(sentences),key=lambda x:len(terms(x[1])&qterms),reverse=True)
-            chosen={i for i,s in ranked[:3] if terms(s)&qterms}
+            chosen=set(chunk['selected_sentences']) if 'selected_sentences' in chunk else {i for i,s in ranked[:3] if terms(s)&qterms}
             for i,sentence in enumerate(sentences):
                 total_fields+=1
                 if i not in chosen:
@@ -160,7 +160,7 @@ def minimize(question,chunks,use_ner=True):
             evidence='['+ref+'] '+'; '.join(selected)
             if estimate('\n'.join(sent+[evidence])) <= setting('context_tokens'):
                 sent.append(evidence)
-                citations.append({'id':ref,'document_id':chunk['document_id'],'name':chunk.get('name',''),'location':chunk['location'],'text':chunk['text']})
+                citations.append({'id':ref,'chunk_id':chunk['id'],'document_id':chunk['document_id'],'name':chunk.get('name',''),'location':chunk['location'],'text':chunk['text']})
             else:
                 withheld.append({'label':'context budget','category':'budget','value':text,'source':chunk['document_id']})
     return {'question':masked_question,'context':'\n'.join(sent),'mapping':mapping,'needed':sorted(set(needed)),
