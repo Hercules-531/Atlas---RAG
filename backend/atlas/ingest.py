@@ -84,6 +84,8 @@ def extract(path):
 
 def parse_worker(path, output, error):
     try:
+        from .media import index as index_images
+        image_manifest=index_images(Path(path))
         total = 0
         with Path(output).open('w', encoding='utf-8') as f:
             for text, location in extract(Path(path)):
@@ -93,7 +95,11 @@ def parse_worker(path, output, error):
                 if text.strip():
                     f.write(json.dumps([text, location], ensure_ascii=False)+'\n')
         if total == 0:
-            raise ValueError('No text found. Scanned PDF OCR is not supported.')
+            if image_manifest['images']:
+                with Path(output).open('w',encoding='utf-8') as f:
+                    for location in dict.fromkeys(i['location'] for i in image_manifest['images']):
+                        f.write(json.dumps(['This source contains a local source image. Image contents have not been interpreted.',location])+'\n')
+            else:raise ValueError('No text found. Scanned PDF OCR is not supported.')
     except Exception as exc:
         Path(error).write_text(str(exc), encoding='utf-8')
 

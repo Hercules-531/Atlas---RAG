@@ -1,4 +1,4 @@
-# Atlas-RAG
+# Atlas
 
 **Minimum necessary, with proof.** Ask questions across local PDF, DOCX, TXT, MD, CSV, XLSX and JSON documents. EmbeddingGemma 2 generates embeddings locally; embedded persistent Chroma plus SQLite BM25 provide local hybrid retrieval. Sentence-aware children retrieve bounded parents, and a local semantic extractive compressor selects evidence before the privacy pipeline. Inspect exactly what the application sends through Prune, and what it withholds.
 
@@ -92,3 +92,22 @@ Run `uv run atlas reindex` while the app/local embedding server is running to re
 `uv run python -m atlas.retrieval_benchmark` reproduces the eight manufactured boundary/rare-ID stress fixtures. See `reports/retrieval-before.json`, `reports/retrieval-after.json`, `reports/retrieval-stress.json`, and `reports/compressor-check.json`. These are retrieval and evidence-retention measurements, not a fresh generated-answer accuracy evaluation. The earlier 72-call cloud evaluation remains a historical result for the preceding implementation.
 
 Answer citations are keyboard-accessible links to local evidence cards. Each card opens the original local file; PDFs include a page anchor. File IDs are resolved through the local registry and paths are restricted to the uploads directory. The UI uses OLED-black panels, static glass materials, a compact focus-expanding search bar, and a textured paper answer surface. Scroll/wheel or drag the answer handle to reveal it; scroll its contents normally, or reverse at the top to dismiss. Background zoom follows scroll intent, pauses when hidden, and respects reduced motion. No fresh compositor-FPS claim is made.
+
+
+## Source images and mode-aware backgrounds
+
+Atlas displays local previews from embedded PDF, DOCX and XLSX images alongside cited answers. PDF pages containing vector drawings can provide an explicitly labelled page preview. Previews are matched by cited page, paragraph range or spreadsheet image-anchor row; this is **not semantic image retrieval or image understanding**. The text-only embedding model and LLM do not receive image pixels, image URLs or base64 image payloads. Image-only documents can expose their local previews, but their contents are not OCR-transcribed or analyzed.
+
+Previews are normalized to JPEG, bounded to 2048 pixels on the longest edge, capped at 40 per source, 20 million decoded input pixels per image, and 24 MiB total preview storage. Limits live in config/app.toml. Previews and their manifest live under the ignored uploads/media directory. File deletion removes them; missing/deleted source IDs return 404. Existing history can resolve newly indexed previews through local source IDs. External Office image relationships are skipped; web image links are never fetched. Office vector objects and native spreadsheet charts are not rendered.
+
+New uploads index images during their bounded parsing worker. To add previews to existing ready documents without re-embedding, run:
+
+```powershell
+uv run atlas index-images
+```
+
+The included illustrated-report.pdf is a synthetic chart example. Select it and ask “How many telescope sessions were recorded in June?” to see its original embedded chart with the cited text answer.
+
+The product display name comes from config/app.toml and is now **Atlas**. Side panels animate in and out over 240 ms; the paper is warmer brown/mustard. Privacy mode crossfades to the supplied Orbit-study(4).gif animation, locally converted to a pausable MP4 with a static first-frame poster. The original GIF is retained locally in the project assets. Local mode crossfades every 36 seconds among Starry Night, Wanderer above the Sea of Fog and Water Lilies, retaining the texture of the original public-domain reproductions. Mode/gallery fades take 1.8 seconds. Artwork attribution is in frontend/public/ATTRIBUTION.txt. Reduced motion stops autoplay and uses the static poster; visibility handlers pause playback/rotation when hidden. Backgrounds are served locally, never hotlinked.
+
+See reports/SOURCE-IMAGES-AND-BACKGROUNDS.md for measured validation. Prior evaluation reports remain historical; no new cloud-answer accuracy or cost claim is inferred from this feature.

@@ -14,6 +14,7 @@ from .config import ROOT, DATA, APP_NAME, DEFAULTS, setting, directories
 from .store import init, db, rows
 from . import ingest, embeddings, privacy, llm
 from .calculations import operation,calculate
+from . import media
 
 init()
 app=FastAPI(title=APP_NAME)
@@ -68,6 +69,26 @@ def original_source(docid:str):
     item=found[0];path=Path(item['path']).resolve()
     if path.parent!=(DATA/'uploads').resolve() or not path.is_file():raise HTTPException(404,'Source file unavailable')
     return FileResponse(path,media_type=mimetypes.guess_type(item['name'])[0] or 'application/octet-stream',filename=item['name'],content_disposition_type='inline')
+
+@app.get('/api/files/{docid}/images')
+def source_images(docid:str,location:str=''):
+    found=rows('SELECT path FROM documents WHERE id=? AND status="ready"',(docid,))
+    if not found:raise HTTPException(404,'Source image unavailable')
+    path=Path(found[0]['path']).resolve()
+    if path.parent!=(DATA/'uploads').resolve():raise HTTPException(404,'Source image unavailable')
+    return media.for_location(path,location,docid)
+
+@app.get('/api/files/{docid}/images/{imageid}')
+def source_image(docid:str,imageid:str):
+    found=rows('SELECT path FROM documents WHERE id=? AND status="ready"',(docid,))
+    if not found:raise HTTPException(404,'Source image unavailable')
+    source=Path(found[0]['path']).resolve()
+    if source.parent!=(DATA/'uploads').resolve():raise HTTPException(404,'Source image unavailable')
+    entry=next((i for i in media.read(source)['images'] if i['id']==imageid),None)
+    if not entry:raise HTTPException(404,'Source image unavailable')
+    root=media.folder(source).resolve();target=(root/entry['filename']).resolve()
+    if target.parent!=root or not target.is_file():raise HTTPException(404,'Source image unavailable')
+    return FileResponse(target,media_type='image/jpeg',headers={'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'})
 
 @app.get('/api/sources/{chunkid}')
 def source_chunk(chunkid:str):
@@ -125,7 +146,8 @@ def _delete_file(docid):
             c.execute('DELETE FROM history'); c.execute('DELETE FROM budgets')
         for item in found:
             path=Path(item['path']).resolve()
-            if path.parent == (DATA/'uploads').resolve(): path.unlink(missing_ok=True)
+            if path.parent == (DATA/'uploads').resolve():
+                media.clear(path);path.unlink(missing_ok=True)
         embeddings.collection().delete(where={'document_id':docid})
         for path in (DATA/'audit').glob('*.json'): path.unlink()
         PENDING.clear()
@@ -165,6 +187,9 @@ def _execute(query,plan):
     if not plan['context']:
         return {'status':'answered','answer':'I cannot answer from the selected evidence. Try a more specific question or select another document.','citations':[],'receipt':{'external_requests':0,'prune_metadata':{},'signature':{'status':'no generation'}}}
     generated=llm.generate(plan['question'],plan['context'],query.mode,query.session)
+    for citation in plan['citations']:
+        source=rows('SELECT path FROM documents WHERE id=?',(citation['document_id'],))
+        citation['images']=media.for_location(Path(source[0]['path']),citation['location'],citation['document_id']) if source else []
     answer=privacy.restore(generated['answer'],plan['mapping'])
     import re
     unknown=set(re.findall(r'\[(S\d+)\]',answer))-{c['id'] for c in plan['citations']}
@@ -178,6 +203,7 @@ def _execute(query,plan):
     audit_records=[json.loads(p.read_text(encoding='utf-8')) for p in (DATA/'audit').glob('*.json')]
     external=sum(bool(r['external']) for r in audit_records if r['session']==query.session)
     receipt={'audit_id':generated['audit_id'],'sent':json.loads(generated['payload']),
+        'source_images_sent_to_model':False,'source_images_scope':'Local previews matched by cited page/section; not image understanding',
         'withheld':[{k:v for k,v in item.items() if k!='value'} for item in plan['withheld']],
         'withheld_local':plan['withheld'],'not_retrieved_chunks':max(0,len(corpus)-len(plan['citations'])),
         'tokens_sent_estimate':sent_tokens,'full_document_tokens_estimate':full_tokens,

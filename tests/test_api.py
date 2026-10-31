@@ -80,3 +80,55 @@ def test_source_endpoint_returns_parent_evidence(client):
         c.execute('INSERT INTO chunks VALUES (?,?,?,?)',('child','pdoc','child text','line 2'))
         c.execute('INSERT INTO chunk_parents VALUES (?,?,?,?)',('child','parent',0,10))
     assert client.get('/api/sources/child').json()['text']=='Full parent evidence.'
+
+def test_source_preview_serving_and_missing_source(client,tmp_path):
+    import json
+    from PIL import Image
+    from atlas import media
+    path=tmp_path/'uploads/image-source.pdf';path.write_bytes(b'fake PDF original')
+    folder=media.folder(path);folder.mkdir(parents=True)
+    Image.new('RGB',(10,10),'white').save(folder/'safe.jpg')
+    (folder/'manifest.json').write_text(json.dumps({'images':[{'id':'safe','filename':'safe.jpg','location':'page 1','kind':'embedded','width':10,'height':10}]}))
+    with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('image-doc','source.pdf',str(path),'ready'))
+    listed=client.get('/api/files/image-doc/images?location=page%201').json();assert listed[0]['url'].endswith('/safe')
+    response=client.get('/api/files/image-doc/images/safe');assert response.status_code==200 and response.headers['content-type']=='image/jpeg'
+    assert response.headers['cache-control']=='private, no-store'
+    with store.db() as c:c.execute('DELETE FROM documents WHERE id="image-doc"')
+    assert client.get('/api/files/image-doc/images/safe').status_code==404
+
+def test_source_preview_path_escape_is_blocked(client,tmp_path):
+    import json
+    from atlas import media
+    path=tmp_path/'uploads/escape.pdf';path.touch();folder=media.folder(path);folder.mkdir(parents=True)
+    (folder/'manifest.json').write_text(json.dumps({'images':[{'id':'escape','filename':'../../outside.jpg','location':'page 1'}]}))
+    with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('escape-doc','source.pdf',str(path),'ready'))
+    assert client.get('/api/files/escape-doc/images/escape').status_code==404
+
+def test_deleting_file_clears_local_image_assets(client,tmp_path):
+    import json
+    from atlas import media
+    path=tmp_path/'uploads/delete-images.pdf';path.touch();folder=media.folder(path);folder.mkdir(parents=True)
+    (folder/'manifest.json').write_text(json.dumps({'images':[]}));(folder/'preview.jpg').write_bytes(b'preview')
+    with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('delete-images','source.pdf',str(path),'ready'))
+    with patch.object(module.embeddings,'collection'):
+        assert client.delete('/api/files/delete-images').status_code==200
+    assert not path.exists() and not folder.exists()
+
+def test_image_metadata_is_added_after_text_generation(client,tmp_path):
+    import json
+    from atlas import media
+    path=tmp_path/'uploads/private-preview.pdf';path.touch();folder=media.folder(path);folder.mkdir(parents=True)
+    (folder/'manifest.json').write_text(json.dumps({'images':[{'id':'image','filename':'image.jpg','location':'page 1','kind':'embedded','width':10,'height':10}]}))
+    with store.db() as c:
+        c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('preview','preview.pdf',str(path),'ready'))
+        c.execute('INSERT INTO chunks VALUES (?,?,?,?)',('preview-chunk','preview','The total is 18.','page 1'))
+    query=module.Ask(question='What is the total?',mode='privacy',session='test-images',document_ids=['preview'])
+    plan={'question':'What is the total?','context':'[S1] The total is 18.','mapping':{},'withheld':[],
+        'citations':[{'id':'S1','document_id':'preview','name':'preview.pdf','location':'page 1','text':'The total is 18.'}]}
+    generated={'answer':'18 [S1]','audit_id':'mock','payload':json.dumps({'messages':[{'content':plan['context']}]}),'usage':{},'prune_metadata':{},'signature':{'status':'mock'},'elapsed_seconds':0}
+    with patch.object(module.llm,'generate',return_value=generated) as call:
+        result=module.execute(query,plan)
+        assert '/images/' not in call.call_args.args[1]
+        assert result['receipt']['source_images_sent_to_model'] is False
+        assert len(result['citations'][0]['images'])==1
+        assert '/images/' not in json.dumps(result['receipt']['sent'])

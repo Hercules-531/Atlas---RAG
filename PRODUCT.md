@@ -11,7 +11,7 @@ Minimum necessary, with proof. Retrieve locally, withhold unrelated data, tokeni
 ## Constraints
 Single central ask bar; top-left upload; top-right privacy; collapsible history; bottom answer drawer. All persistent user data stays local. Cloud inference goes through Prune; zero authorized paid spend. No guaranteed-private claim.
 ## Brand Commitments
-Atlas-RAG; local public-domain Starry Night background with restrained motion; minimal readable controls. The approved plan fixes composition; implement directly from that brief.
+Atlas; local public-domain Starry Night background with restrained motion; minimal readable controls. The approved plan fixes composition; implement directly from that brief.
 ## Evidence
 Synthetic datasets and measured results only. No existing model accuracy or performance results.
 ## Accessibility

@@ -1,6 +1,6 @@
 # One-slide pitch outline
 
-**Atlas-RAG — Minimum necessary, with proof.**
+**Atlas — Minimum necessary, with proof.**
 
 - **Usefulness · 40%:** Ask across PDF, Word, spreadsheets, JSON and text. Local indexing, citations, consent and document management work on user-supplied data rather than an HR-only schema.
 - **Efficiency · 30%:** Select relevant fields/sentences before cloud inference. Show real paired usage, list-price equivalents, and separate Prune savings. Insert only measured figures from the current report; retain incomplete denominators.

@@ -2,7 +2,28 @@
 name = "atlas-rag"
 version = "0.1.0"
 requires-python = ">=3.12,<3.13"
-dependencies = ["fastapi", "uvicorn", "python-multipart", "httpx", "chromadb", "numpy", "sentence-transformers>=6.1", "transformers>=5.18", "torch", "spacy", "pypdf", "python-docx", "openpyxl", "ijson", "pyyaml", "cryptography", "python-dotenv", "reportlab", "pytest"]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "python-multipart",
+    "httpx",
+    "chromadb",
+    "numpy",
+    "sentence-transformers>=6.1",
+    "transformers>=5.18",
+    "torch",
+    "spacy",
+    "pypdf",
+    "python-docx",
+    "openpyxl",
+    "ijson",
+    "pyyaml",
+    "cryptography",
+    "python-dotenv",
+    "reportlab",
+    "pytest",
+    "pymupdf>=2.0",
+]
 
 [project.scripts]
 atlas = "atlas.cli:main"

@@ -1,4 +1,4 @@
-# Atlas-RAG implementation plan
+# Atlas implementation plan
 
 Repository: https://github.com/Hercules-531/Atlas---RAG
 
@@ -150,3 +150,7 @@ Hindi retrieval is a final ten-minute stretch only. Voice, hosted deployment, an
 ## Follow-up retrieval and UI refinement
 
 Implemented local hybrid BM25/dense search, bounded parent-child retrieval, sentence-aware chunking with optional semantic breakpoints, semantic extractive compression, CUDA0 generation using existing Unsloth runtime dependencies, and the user-directed OLED/glass/paper interface with local linked source navigation. See reports/RETRIEVAL-UPGRADE.md for measured retention/stress results and limits. Late chunking remains intentionally unimplemented because no measured benefit justified a token-level pooling runtime change. Existing uploads were reindexed locally; user source files were preserved.
+
+## Source images and mode-aware presentation
+
+Implemented local PDF/DOCX/XLSX source previews, including labelled vector-PDF page previews, bounded image cache and deletion, and source-associated image figures in answers. Images do not enter model payloads and are not interpreted by the text-only model. Rebranded the app as Atlas; added 240 ms panel enter/exit motion, brown/mustard paper, the supplied Orbit animation in Privacy mode, and a locally attributed antique-painting carousel in Local mode. See reports/SOURCE-IMAGES-AND-BACKGROUNDS.md for actual validation and limits.

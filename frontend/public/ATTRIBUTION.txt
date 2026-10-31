@@ -2,3 +2,16 @@ Vincent van Gogh, The Starry Night (1889).
 Faithful reproduction from Google Art Project / Wikimedia Commons.
 Public-domain provenance: https://commons.wikimedia.org/wiki/File:Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg
 Downloaded locally at 3840px. No hotlinking or runtime image requests.
+
+
+Local painting carousel:
+Caspar David Friedrich, Wanderer above the Sea of Fog (1818).
+Faithful public-domain reproduction: https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg
+Claude Monet, Water Lilies (1906), Ryerson collection.
+Faithful public-domain reproduction: https://commons.wikimedia.org/wiki/File:Claude_Monet_-_Water_Lilies_-_1906,_Ryerson.jpg
+Full-resolution local JPEG copies retain their original painted texture; no runtime hotlinks.
+
+Privacy background:
+Orbit-study(4).gif supplied locally by the user, copied as backgrounds/orbit.gif.
+Converted locally to orbit.mp4 for pausable, reduced-motion-aware playback; orbit-poster.jpg is its first frame.
+This user-supplied animation is not represented as public-domain artwork.

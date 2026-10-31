@@ -1,0 +1,43 @@
+{
+  "brand": "Atlas",
+  "panel_entry": {
+    "properties": [
+      "opacity",
+      "transform"
+    ],
+    "duration_ms": 240,
+    "intermediate_transform_x_px": 374.704
+  },
+  "panel_exit": {
+    "retained_while_closing": true,
+    "inert_while_closing": true,
+    "removed_after_exit": true
+  },
+  "privacy_background": {
+    "active_scene": "orbit",
+    "video_ready_state": 4,
+    "autoplay_observed": true,
+    "mode_crossfade_ms": 1800
+  },
+  "reduced_motion": {
+    "video_paused": true,
+    "video_hidden": true,
+    "background_transition_duration": "0s",
+    "playback_resumed_after_restoring_motion": true
+  },
+  "local_carousel": {
+    "observed_initial_scene": "starry",
+    "observed_transition": [
+      "wanderer",
+      "lilies"
+    ],
+    "actual_transition_observed": true,
+    "configured_interval_ms": 36000
+  },
+  "paper_css_rgb": [
+    221,
+    197,
+    142
+  ],
+  "hidden_tab_verification": "Not independently verified: this headless browser kept document.hidden false in both tabs; visibility pause handlers are implemented."
+}

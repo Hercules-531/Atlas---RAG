@@ -7,7 +7,7 @@ from .config import ROOT, directories
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument('command',choices=['dev','serve','setup-models','demo','eval','reindex'])
+    parser.add_argument('command',choices=['dev','serve','setup-models','demo','eval','reindex','index-images'])
     parser.add_argument('--live',action='store_true')
     parser.add_argument('--synthetic-full-context',action='store_true')
     parser.add_argument('--resume',action='store_true')
@@ -37,6 +37,12 @@ def main():
                     wheel.write_bytes(response.read())
                 print('Compatible NER download failed; using official 3.7.1 fallback with a spaCy compatibility warning.')
                 subprocess.run(['uv','pip','install','--python',sys.executable,'--no-deps',str(wheel)],check=True)
+    elif args.command=='index-images':
+        from .media import index
+        from .store import init,rows
+        init()
+        for document in rows('SELECT id,path FROM documents WHERE status="ready"'):
+            result=index(document['path']);print(document['id'],len(result['images']),'local previews',flush=True)
     elif args.command=='reindex':
         from .ingest import reindex
         from .store import init

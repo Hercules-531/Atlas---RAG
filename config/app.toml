@@ -1,4 +1,4 @@
-name = "Atlas-RAG"
+name = "Atlas"
 max_upload_mib = 100
 max_pdf_pages = 1000
 max_table_rows = 250000
@@ -8,3 +8,6 @@ parse_timeout_seconds = 900
 context_tokens = 2048
 output_tokens = 512
 session_tokens = 50000
+max_source_images = 40
+max_source_image_pixels = 20000000
+max_source_image_mib = 24

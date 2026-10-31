@@ -12,9 +12,9 @@
  --painting-veil:#00000075; --painting-veil-bottom:#000000eb; --painting-veil-top:#00000055;
  --placeholder:#d0ceca; --scrim:#0009; --pre-background:#111; --scroll-thumb:#625f59;
  --type-shadow:#0009; --type-shadow-strong:#000;
- --paper:#f3f0e7; --paper-ink:#27241f; --paper-muted:#656056; --paper-line:#4f45312b;
- --paper-surface:#e8e3d7; --paper-accent:#665330; --paper-error:#8d3028;
- --gap-sm:12px; --gap-md:24px; --gap-lg:40px; --gap-xl:64px;
+ --paper:#ddc58e; --paper-ink:#2e2518; --paper-muted:#675335; --paper-line:#4f45312b;
+ --paper-surface:#cdb47d; --paper-accent:#665330; --paper-error:#8d3028;
+ --panel-duration:240ms; --background-fade:1800ms; --paper-grain-alpha:.22; --gap-sm:12px; --gap-md:24px; --gap-lg:40px; --gap-xl:64px;
  --text-sm:12px; --text-base:14px; --text-input:17px; --text-answer:24px;
  color-scheme:dark;
 }
