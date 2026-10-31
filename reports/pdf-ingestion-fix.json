@@ -1,0 +1,11 @@
+{
+  "file": "DreamDiffusion.pdf",
+  "bytes": 6429482,
+  "pages": 17,
+  "status": "ready",
+  "indexed_chunks": 37,
+  "retrieved_sources": 8,
+  "cause": "Bidirectional embedding input exceeded default 512-token physical microbatch",
+  "fix": "Set batch and microbatch to 8192, matching local embedding context; preserve backend error reasons",
+  "test_suite_passed": 87
+}

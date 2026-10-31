@@ -31,6 +31,12 @@ def embed(texts, query=False):
         import httpx
         with httpx.Client(timeout=120,trust_env=False) as c:
             response=c.post('http://127.0.0.1:8767/v1/embeddings',json={'model':'embeddinggemma-2','input':inputs})
+            if response.is_error:
+                try:
+                    error=response.json().get('error',{})
+                    message=error.get('message',str(error)) if isinstance(error,dict) else str(error)
+                except (ValueError,TypeError):message=response.text[:500]
+                raise ValueError('Local embedding failed: '+message)
             response.raise_for_status()
             return validate([r['embedding'] for r in sorted(response.json()['data'],key=lambda r:r['index'])])
     return validate(model().encode(inputs, batch_size=8, normalize_embeddings=True, show_progress_bar=False))

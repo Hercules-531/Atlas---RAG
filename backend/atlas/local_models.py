@@ -31,7 +31,9 @@ def start():
         gpu=False
         print('CUDA discovery timed out; using local CPU inference.',flush=True)
     print('Local generation device: '+('CUDA0 (dedicated NVIDIA GPU)' if gpu else 'CPU; CUDA runtime unavailable'),flush=True)
-    for port,path,extra in [(8767,embed,['--embeddings','--pooling','mean','--device','none','-ngl','0','--cache-type-k','f32','--cache-type-v','f32']),
+    # Bidirectional embeddings require the entire input in a physical microbatch.
+    # llama.cpp otherwise reduces the batch to its 512-token microbatch default.
+    for port,path,extra in [(8767,embed,['--embeddings','--pooling','mean','--batch-size','8192','--ubatch-size','8192','--device','none','-ngl','0','--cache-type-k','f32','--cache-type-v','f32']),
                              (8766,llm,['--device','CUDA0','-ngl','99'] if gpu else ['-ngl','0'])]:
         if listening(port) or path is None or not path.exists(): continue
         log=(DATA/f'model-{port}.log').open('w',encoding='utf-8')

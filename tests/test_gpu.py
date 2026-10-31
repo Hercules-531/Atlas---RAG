@@ -18,4 +18,6 @@ def test_cuda_dependency_path_and_explicit_gpu_offload(tmp_path,monkeypatch):
     assert len(calls)==2
     assert calls[1][0][-4:]==['--device','CUDA0','-ngl','99']
     assert calls[0][0][calls[0][0].index('--device')+1]=='none'
+    assert calls[0][0][calls[0][0].index('--batch-size')+1]=='8192'
+    assert calls[0][0][calls[0][0].index('--ubatch-size')+1]=='8192'
     assert calls[1][1]['env']['PATH'].startswith(str(cuda))
