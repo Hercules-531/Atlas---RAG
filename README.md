@@ -152,3 +152,12 @@ Original chunk text, source IDs, citations and history remain unchanged. Index c
 New uploads use context automatically. Existing indexed files were updated in the owning app process without reparsing or regenerating media captions/transcripts. For maintenance, POST to `/api/retrieval/contextualize` while the app is running. See reports/CONTEXTUAL-RETRIEVAL.md and the reproducible `uv run python -m atlas.contextual_benchmark` stress ablation. The narrow stress improvement is not a fresh generated-answer accuracy score.
 
 Privacy mode now has **video only**, with a static video poster for reduced motion. Local mode's painting/map carousel is unchanged.
+
+
+## Answer explanations and PDF layout
+
+Overview questions now request a direct definition plus a short explanation of mechanism/purpose, usually 80–140 words when supported. This is a soft style target, not a mandatory minimum; factual lookups remain brief. Unsupported questions still identify the missing evidence rather than filling gaps from model knowledge. The 512-token output cap is unchanged.
+
+PDF soft line wraps no longer become separate sentences during compression. Blank lines remain paragraph boundaries; original source spans/offsets remain available. Unicode ligatures and CamelCase are normalized for term matching, without guessing missing font glyphs or rewriting original evidence. The compressor favors substantive passages over title fragments and reduces dense benchmark-table selection for overview questions. Existing indexed parents benefit at query time; re-uploading PDFs is not required.
+
+Citation groups such as [S1, S2] are validated and rendered as individual clickable sources. Numerical arrays remain plain text. See reports/ANSWER-QUALITY.md for measured regression checks; no broad generated-answer accuracy claim is made.

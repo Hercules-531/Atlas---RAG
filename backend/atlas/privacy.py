@@ -2,6 +2,7 @@ import hashlib
 import json
 import re
 import secrets
+import unicodedata
 from functools import lru_cache
 import yaml
 from .config import ROOT, setting
@@ -17,6 +18,8 @@ PATTERNS = {
 STOP = set('what is the a an of for to in how much many does do are was and please tell me about'.split())
 
 def terms(text):
+    text=unicodedata.normalize('NFKC',text)
+    text=re.sub(r'(?<=[a-z0-9])(?=[A-Z])',' ',text)
     return set(re.findall(r'[\w]+',text.lower().replace('_',' ').replace('-',' '))) - STOP
 
 def luhn(text):

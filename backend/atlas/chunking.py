@@ -6,7 +6,9 @@ import numpy as np
 VERSION='sentence-parent-v1'
 
 def sentences(text):
-    matches=list(re.finditer(r'[^\n]+?(?:[.!?](?=\s|$)|$)|[^\n]+$',text,re.M))
+    # PDF layout wraps sentences onto single newlines. Only a blank line is a
+    # paragraph boundary; preserve raw spans/offsets rather than inventing text.
+    matches=list(re.finditer(r'\S[\s\S]*?(?:[.!?](?=\s|[A-Z][a-z]|$)|(?=\n\s*\n)|$)',text))
     result=[]
     for m in matches:
         value=m.group().strip()

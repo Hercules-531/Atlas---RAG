@@ -51,28 +51,38 @@ def retrieve(question,document_ids=None,method='hybrid',parent=True,compress=Tru
 def compress_sentences(question,chunks,query_vector=None):
     """Extractive contextual compression; no LLM calls, no rewritten facts."""
     candidates=[]
+    overview=bool(re.search(r'(?i)^\s*(what\s+(is|are)|what.s|explain|describe|summari[sz]e|give.*overview)\b',question))
+    definition=r'(?i)\b(introduces?|propos(?:e|es|ed)|method|framework|approach|designed to|combines?|leverages?)\b'
     for ci,chunk in enumerate(chunks):
         if is_record(chunk['text']):continue
         units=sentences(chunk['text']);chunk['sentence_units']=[u[0] for u in units]
         # Bound local work while favoring lexical matches across the entire parent.
-        ranked=sorted(range(len(units)),key=lambda i:len(terms(units[i][0])&terms(question)),reverse=True)[:12]
+        substantive=[i for i,u in enumerate(units) if len(u[0].split())>=5]
+        pool=substantive or list(range(len(units)))
+        ranked=sorted(pool,key=lambda i:len(terms(units[i][0])&terms(question)),reverse=True)[:12]
         candidates.extend((ci,i,units[i][0]) for i in ranked)
     if not candidates:return
     query=np.asarray(query_vector if query_vector is not None else embed([question],query=True)[0])
     vectors=np.asarray(embed([indexed_text(chunks[ci].get('index_context') or '',text) for ci,_,text in candidates]))
     scored={}
     for (ci,i,text),v in zip(candidates,vectors):
-        overlap=len(terms(text+' '+(chunks[ci].get('index_context') or ''))&terms(question))/max(1,len(terms(question)))
+        overlap=len(terms(text)&terms(question))/max(1,len(terms(question)))
+        scope_overlap=len(terms(chunks[ci].get('index_context') or '')&terms(question))/max(1,len(terms(question)))
         cosine=float(v@query)
-        scored.setdefault(ci,[]).append((cosine*.7+overlap*.3,i,cosine,overlap))
+        boost=.14 if overview and re.search(definition,text) else 0
+        if overview and len(re.findall(r'\d+(?:\.\d+)?',text))>12:boost-=.25
+        scored.setdefault(ci,[]).append((cosine*.65+overlap*.3+scope_overlap*.05+boost,i,cosine,overlap))
     global_scores=sorted([(score,ci,i,cosine,overlap) for ci,values in scored.items() for score,i,cosine,overlap in values],reverse=True)
     best=global_scores[0][0]
-    accepted={(ci,i) for score,ci,i,cosine,overlap in global_scores[:8] if score>=best*.8 and (cosine>=.4 or overlap>0)}
+    limit=10 if overview else 8
+    accepted={(ci,i) for score,ci,i,cosine,overlap in global_scores[:limit] if score>=best*.78 and (cosine>=.4 or overlap>0)}
     for ci,values in scored.items():
-        chosen=[i for _,i,_,_ in sorted(values,reverse=True)[:3] if (ci,i) in accepted]
+        per_parent=5 if overview else 3
+        chosen=[i for _,i,_,_ in sorted(values,reverse=True)[:per_parent] if (ci,i) in accepted]
         units=chunks[ci]['sentence_units']
         # Local antecedents retain meaning for short pronoun-led statements.
         for i in chosen.copy():
             if i>0 and re.match(r'(?i)^(it|they|this|that|these|those)\b',units[i]):chosen.append(i-1)
+            if overview and len(chosen)<per_parent and re.search(definition,units[i]) and i+1<len(units) and len(units[i+1].split())<=100:chosen.append(i+1)
         chunks[ci]['selected_sentences']=sorted(set(chosen))
         chunks[ci]['retrieval_method']='hybrid BM25+dense; parent expansion; local semantic sentence compression'

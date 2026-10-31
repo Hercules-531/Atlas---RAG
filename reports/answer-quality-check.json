@@ -1,0 +1,70 @@
+[
+  {
+    "question_kind": "definition",
+    "source": "DreamDiffusion.pdf",
+    "http_status": 200,
+    "answer_word_count": 132,
+    "abstained": false,
+    "usage": {
+      "completion_tokens": 188,
+      "prompt_tokens": 1206,
+      "total_tokens": 1394,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "external_requests": 0,
+    "warnings": []
+  },
+  {
+    "question_kind": "definition",
+    "source": "SAMGA.pdf",
+    "http_status": 200,
+    "answer_word_count": 161,
+    "abstained": false,
+    "usage": {
+      "completion_tokens": 252,
+      "prompt_tokens": 1099,
+      "total_tokens": 1351,
+      "prompt_tokens_details": {
+        "cached_tokens": 222
+      }
+    },
+    "external_requests": 0,
+    "warnings": []
+  },
+  {
+    "question_kind": "fact lookup",
+    "source": "employees.pdf",
+    "http_status": 200,
+    "answer_word_count": 8,
+    "abstained": false,
+    "usage": {
+      "completion_tokens": 14,
+      "prompt_tokens": 371,
+      "total_tokens": 385,
+      "prompt_tokens_details": {
+        "cached_tokens": 222
+      }
+    },
+    "external_requests": 0,
+    "warnings": []
+  },
+  {
+    "question_kind": "unsupported",
+    "source": "DreamDiffusion.pdf",
+    "http_status": 200,
+    "answer_word_count": 38,
+    "abstained": true,
+    "usage": {
+      "completion_tokens": 53,
+      "prompt_tokens": 794,
+      "total_tokens": 847,
+      "prompt_tokens_details": {
+        "cached_tokens": 222
+      }
+    },
+    "external_requests": 0,
+    "warnings": []
+  }
+]

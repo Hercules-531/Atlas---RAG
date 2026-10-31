@@ -232,7 +232,9 @@ def _execute(query,plan):
         citation['images']=media.for_location(Path(source[0]['path']),citation['location'],citation['document_id']) if source else []
     answer=privacy.restore(generated['answer'],plan['mapping'])
     import re
-    unknown=set(re.findall(r'\[(S\d+)\]',answer))-{c['id'] for c in plan['citations']}
+    groups=re.findall(r'\[((?:S?\d+)(?:\s*,\s*S?\d+)*)\]',answer)
+    references={'S'+n for group in groups if ',' not in group or 'S' in group for n in re.findall(r'\d+',group)}
+    unknown=references-{c['id'] for c in plan['citations']}
     warnings=[]
     if unknown: warnings.append('Unverified citations: '+', '.join(unknown))
     if '[[ATLAS_' in answer: warnings.append('An unknown placeholder was not restored')

@@ -8,7 +8,8 @@ type Props={answer?:string;citations?:Citation[];warnings?:string[];blocked:bool
 
 export default function Answer({answer,citations=[],warnings=[],blocked,onReceipt,hasReceipt}:Props){
   const[active,setActive]=useState('');
-  const referenced=new Set(Array.from((answer||'').matchAll(/\[(S?\d+)\]/g),m=>m[1].startsWith('S')?m[1]:'S'+m[1]));
+  const formatted=(answer||'').replace(/\[((?:S\d+)(?:\s*,\s*S?\d+)+)\]/g,(_,group:string)=>group.split(',').map(token=>'['+token.trim()+']').join(' '));
+  const referenced=new Set(Array.from(formatted.matchAll(/\[(S?\d+)\]/g),m=>m[1].startsWith('S')?m[1]:'S'+m[1]));
   const visible=referenced.size?citations.filter(c=>referenced.has(c.id)):citations;
   const[loadedImages,setLoadedImages]=useState<Record<string,SourceImage[]>>({});
   const[allImages,setAllImages]=useState(false);
@@ -22,7 +23,7 @@ export default function Answer({answer,citations=[],warnings=[],blocked,onReceip
     if(detail){detail.open=true;detail.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'nearest'});detail.focus({preventScroll:true})}
     history.replaceState(null,'','#source-'+id);
   }
-  const parts=(answer||'').split(/(\[(?:S)?\d+\])/g);
+  const parts=formatted.split(/(\[(?:S)?\d+\])/g);
   return <div className="result-layout"><article className="main-answer"><div className="answer-title"><h2>{blocked?'Nothing sent.':'Your answer'}</h2><span>Grounded in your documents</span></div><div className="answer-text">{parts.map((part,i)=>{
     const match=part.match(/^\[(S?\d+)\]$/);const id=match?(match[1].startsWith('S')?match[1]:'S'+match[1]):'';
     return id&&citations.some(c=>c.id===id)?<a key={i} className="citation" href={'#source-'+id} aria-label={'Go to source '+id.slice(1)} onClick={e=>visit(e,id)}>{id.slice(1)}</a>:<span key={i}>{part}</span>
