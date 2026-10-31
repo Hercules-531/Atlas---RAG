@@ -1,0 +1,10 @@
+customer,plan,salary,email,confidential_notes
+CLIENT-1,Tier 1,41000,client1@example.invalid,CANARY_CUSTOMER_00
+CLIENT-2,Tier 2,42000,client2@example.invalid,CANARY_CUSTOMER_01
+CLIENT-3,Tier 3,43000,client3@example.invalid,CANARY_CUSTOMER_02
+CLIENT-4,Tier 4,44000,client4@example.invalid,CANARY_CUSTOMER_03
+CLIENT-5,Tier 5,45000,client5@example.invalid,CANARY_CUSTOMER_04
+CLIENT-6,Tier 6,46000,client6@example.invalid,CANARY_CUSTOMER_05
+CLIENT-7,Tier 7,47000,client7@example.invalid,CANARY_CUSTOMER_06
+CLIENT-8,Tier 8,48000,client8@example.invalid,CANARY_CUSTOMER_07
+CLIENT-9,Tier 9,49000,client9@example.invalid,CANARY_CUSTOMER_08

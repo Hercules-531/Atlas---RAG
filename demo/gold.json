@@ -1,0 +1,254 @@
+[
+  {
+    "id": "hr-0",
+    "dataset": "employees.pdf",
+    "question": "What is the annual leave entitlement?",
+    "expected": "24 days",
+    "sensitive": false
+  },
+  {
+    "id": "hr-1",
+    "dataset": "employees.pdf",
+    "question": "What is the sick leave entitlement?",
+    "expected": "12 days",
+    "sensitive": false
+  },
+  {
+    "id": "hr-2",
+    "dataset": "employees.pdf",
+    "question": "What is the parental leave entitlement?",
+    "expected": "90 days",
+    "sensitive": false
+  },
+  {
+    "id": "hr-3",
+    "dataset": "employees.pdf",
+    "question": "What is the notice period entitlement?",
+    "expected": "30 days",
+    "sensitive": false
+  },
+  {
+    "id": "hr-4",
+    "dataset": "employees.pdf",
+    "question": "What is the remote work entitlement?",
+    "expected": "3 days weekly",
+    "sensitive": false
+  },
+  {
+    "id": "hr-5",
+    "dataset": "employees.pdf",
+    "question": "What is the training allowance entitlement?",
+    "expected": "500 credits",
+    "sensitive": false
+  },
+  {
+    "id": "hr-6",
+    "dataset": "employees.pdf",
+    "question": "What is the expense deadline entitlement?",
+    "expected": "15 days",
+    "sensitive": false
+  },
+  {
+    "id": "hr-7",
+    "dataset": "employees.pdf",
+    "question": "What is the probation entitlement?",
+    "expected": "60 days",
+    "sensitive": false
+  },
+  {
+    "id": "hr-8",
+    "dataset": "employees.pdf",
+    "question": "What is the carryover leave entitlement?",
+    "expected": "5 days",
+    "sensitive": false
+  },
+  {
+    "id": "contract-0",
+    "dataset": "contract.docx",
+    "question": "What is the payment deadline?",
+    "expected": "30 days",
+    "sensitive": false
+  },
+  {
+    "id": "contract-1",
+    "dataset": "contract.docx",
+    "question": "What is the renewal term?",
+    "expected": "12 months",
+    "sensitive": false
+  },
+  {
+    "id": "contract-2",
+    "dataset": "contract.docx",
+    "question": "What is the termination notice?",
+    "expected": "45 days",
+    "sensitive": false
+  },
+  {
+    "id": "contract-3",
+    "dataset": "contract.docx",
+    "question": "What is the support response?",
+    "expected": "4 hours",
+    "sensitive": false
+  },
+  {
+    "id": "contract-4",
+    "dataset": "contract.docx",
+    "question": "What is the liability cap?",
+    "expected": "2000 credits",
+    "sensitive": false
+  },
+  {
+    "id": "contract-5",
+    "dataset": "contract.docx",
+    "question": "What is the governing law?",
+    "expected": "Fictionland",
+    "sensitive": false
+  },
+  {
+    "id": "contract-6",
+    "dataset": "contract.docx",
+    "question": "What is the delivery deadline?",
+    "expected": "14 days",
+    "sensitive": false
+  },
+  {
+    "id": "contract-7",
+    "dataset": "contract.docx",
+    "question": "What is the warranty period?",
+    "expected": "180 days",
+    "sensitive": false
+  },
+  {
+    "id": "contract-8",
+    "dataset": "contract.docx",
+    "question": "What is the audit notice?",
+    "expected": "10 days",
+    "sensitive": false
+  },
+  {
+    "id": "clinic-0",
+    "dataset": "clinic.json",
+    "question": "What is the diagnosis for CASE-1?",
+    "expected": "FICTIONAL condition 1",
+    "sensitive": true
+  },
+  {
+    "id": "customer-0",
+    "dataset": "customers.csv",
+    "question": "What is the salary for CLIENT-1?",
+    "expected": "41000",
+    "sensitive": true
+  },
+  {
+    "id": "clinic-1",
+    "dataset": "clinic.json",
+    "question": "What is the appointment for CASE-2?",
+    "expected": "11:00",
+    "sensitive": false
+  },
+  {
+    "id": "customer-1",
+    "dataset": "customers.csv",
+    "question": "What is the plan for CLIENT-2?",
+    "expected": "Tier 2",
+    "sensitive": false
+  },
+  {
+    "id": "clinic-2",
+    "dataset": "clinic.json",
+    "question": "What is the appointment for CASE-3?",
+    "expected": "12:00",
+    "sensitive": false
+  },
+  {
+    "id": "customer-2",
+    "dataset": "customers.csv",
+    "question": "What is the plan for CLIENT-3?",
+    "expected": "Tier 3",
+    "sensitive": false
+  },
+  {
+    "id": "clinic-3",
+    "dataset": "clinic.json",
+    "question": "What is the diagnosis for CASE-4?",
+    "expected": "FICTIONAL condition 4",
+    "sensitive": true
+  },
+  {
+    "id": "customer-3",
+    "dataset": "customers.csv",
+    "question": "What is the salary for CLIENT-4?",
+    "expected": "44000",
+    "sensitive": true
+  },
+  {
+    "id": "clinic-4",
+    "dataset": "clinic.json",
+    "question": "What is the appointment for CASE-5?",
+    "expected": "14:00",
+    "sensitive": false
+  },
+  {
+    "id": "customer-4",
+    "dataset": "customers.csv",
+    "question": "What is the plan for CLIENT-5?",
+    "expected": "Tier 5",
+    "sensitive": false
+  },
+  {
+    "id": "clinic-5",
+    "dataset": "clinic.json",
+    "question": "What is the appointment for CASE-6?",
+    "expected": "15:00",
+    "sensitive": false
+  },
+  {
+    "id": "customer-5",
+    "dataset": "customers.csv",
+    "question": "What is the plan for CLIENT-6?",
+    "expected": "Tier 6",
+    "sensitive": false
+  },
+  {
+    "id": "clinic-6",
+    "dataset": "clinic.json",
+    "question": "What is the diagnosis for CASE-7?",
+    "expected": "FICTIONAL condition 7",
+    "sensitive": true
+  },
+  {
+    "id": "customer-6",
+    "dataset": "customers.csv",
+    "question": "What is the salary for CLIENT-7?",
+    "expected": "47000",
+    "sensitive": true
+  },
+  {
+    "id": "clinic-7",
+    "dataset": "clinic.json",
+    "question": "What is the appointment for CASE-8?",
+    "expected": "17:00",
+    "sensitive": false
+  },
+  {
+    "id": "customer-7",
+    "dataset": "customers.csv",
+    "question": "What is the plan for CLIENT-8?",
+    "expected": "Tier 8",
+    "sensitive": false
+  },
+  {
+    "id": "clinic-8",
+    "dataset": "clinic.json",
+    "question": "What is the appointment for CASE-9?",
+    "expected": "18:00",
+    "sensitive": false
+  },
+  {
+    "id": "customer-8",
+    "dataset": "customers.csv",
+    "question": "What is the plan for CLIENT-9?",
+    "expected": "Tier 9",
+    "sensitive": false
+  }
+]

@@ -1,0 +1,10 @@
+sensitive_fields:
+  contact: [email, phone, mobile, address]
+  identity: [aadhaar, aadhar, pan, ssn, passport, government_id, employee_id, customer_id, name, patient]
+  birth: [dob, birth, birthday]
+  financial: [salary, wage, compensation, card, account, balance]
+  health: [diagnosis, medication, medical, treatment]
+  confidential: [secret, private, confidential, internal_notes, canary]
+custom_patterns:
+  - category: confidential
+    pattern: 'CANARY_[A-Z0-9_]+'

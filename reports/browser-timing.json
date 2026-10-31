@@ -1,0 +1,6 @@
+{
+  "sample_frames": 119,
+  "median_raf_interval_ms": 4.2,
+  "p95_raf_interval_ms": 4.2,
+  "scope": "Foreground browser rAF timing, not guaranteed compositor FPS; measured through Playwright on this machine"
+}

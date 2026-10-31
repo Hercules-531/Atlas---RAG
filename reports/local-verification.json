@@ -1,0 +1,12 @@
+{
+  "embedding_dimensions": 768,
+  "retrieved_ids": [
+    "0a2060d4a6c94781bff3afb76cb0c711",
+    "552a87af0d30444b82950eead13005e8",
+    "c1bade45aec444e9b97e1385fb253f9f"
+  ],
+  "elapsed_seconds": 1.391,
+  "external_connection_attempts": 0,
+  "local_connections": 1,
+  "scope": "Python-owned connections during this check; not OS-wide model-server tracing"
+}

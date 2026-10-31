@@ -1,0 +1,10 @@
+name = "Atlas-RAG"
+max_upload_mib = 100
+max_pdf_pages = 1000
+max_table_rows = 250000
+max_extracted_text_mib = 50
+max_archive_mib = 512
+parse_timeout_seconds = 900
+context_tokens = 2048
+output_tokens = 512
+session_tokens = 50000

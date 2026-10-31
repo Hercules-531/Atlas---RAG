@@ -1,0 +1,2 @@
+import {useEffect,useState} from 'react';
+export default function Painting(){const[paused,setPaused]=useState(document.hidden);useEffect(()=>{const listener=()=>setPaused(document.hidden);document.addEventListener('visibilitychange',listener);return()=>document.removeEventListener('visibilitychange',listener)},[]);return <div className={'painting '+(paused?'paused':'')} aria-hidden="true"><div className="painting-image"/><div className="veil"/></div>}
