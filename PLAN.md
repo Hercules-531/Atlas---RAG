@@ -154,3 +154,8 @@ Implemented local hybrid BM25/dense search, bounded parent-child retrieval, sent
 ## Source images and mode-aware presentation
 
 Implemented local PDF/DOCX/XLSX source previews, including labelled vector-PDF page previews, bounded image cache and deletion, and source-associated image figures in answers. Images do not enter model payloads and are not interpreted by the text-only model. Rebranded the app as Atlas; added 240 ms panel enter/exit motion, brown/mustard paper, the supplied Orbit animation in Privacy mode, and a locally attributed antique-painting carousel in Local mode. See reports/SOURCE-IMAGES-AND-BACKGROUNDS.md for actual validation and limits.
+
+
+## Gemma 12B and uploaded media
+
+Local generation now uses the user's cached Gemma 4 12B plus its vision projector. Uploaded image/video search uses local descriptions; audio/video speech uses local Whisper transcripts. The existing text-only EmbeddingGemma 2 and hybrid index remain. Raw media stays local; cloud answers can receive minimized derived text. Added type-filtered media search, playback and bounded processing, targeted single-owner reindexing, horizontal-only search expansion, stronger paper texture, the antique map, and faster flower/video mode backgrounds. See reports/GEMMA12B-MULTIMODAL.md for actual validation and limitations.

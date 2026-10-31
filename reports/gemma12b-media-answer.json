@@ -1,0 +1,14 @@
+{
+  "answer": "The project code mentioned is amber [S1].",
+  "model": "gemma-4-12B-it-qat",
+  "usage": {
+    "completion_tokens": 11,
+    "prompt_tokens": 127,
+    "total_tokens": 138,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  },
+  "external_requests": 0,
+  "gpu_memory": "NVIDIA GeForce RTX 5070 Ti Laptop GPU, 8594 MiB, 12227 MiB"
+}

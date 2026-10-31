@@ -1,0 +1,31 @@
+{
+  "search_bar": {
+    "compact_width_px": 483.796875,
+    "focused_width_px": 590,
+    "compact_height_px": 52,
+    "focused_height_px": 52
+  },
+  "backgrounds": {
+    "local_first_scene": "antique-map",
+    "loaded_map_width_px": 3840,
+    "rotation_interval_ms": 18000,
+    "crossfade_ms": 900,
+    "privacy_observed_transition": [
+      "flower",
+      "privacy-video"
+    ],
+    "video_source": "/backgrounds/privacy-cycle.mp4",
+    "video_playback_observed": true
+  },
+  "media_browser": {
+    "audio_results": 2,
+    "audio_players": 2,
+    "video_results": 4,
+    "video_players": 4,
+    "video_previews": 4
+  },
+  "reindex_after_owner_delegation": {
+    "search_http_status": 200,
+    "audio_results": 2
+  }
+}

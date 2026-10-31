@@ -1,0 +1,62 @@
+{
+  "image": {
+    "query": "glowing blue flower",
+    "http_status": 200,
+    "results": [
+      {
+        "name": "flower-inspection.png",
+        "location": "image 1",
+        "excerpt": "Local machine-generated visual description (not verified): A digital illustration of a single flower, resembling a dahlia or chrysanthemum, set against a solid black background. The flower head is composed of glowing, pixelated dots in shades of blue, cyan, and green, creating a neon or LED-like effect. The petals are layered and textured with a grid-like pattern. A thin, dark brown stem extends downward from the base of the flower head, ending in a small, withered leaf. The overall aesthetic is a mix of nature and digital glitch art.",
+        "preview_count": 1
+      }
+    ]
+  },
+  "audio": {
+    "query": "telescope sessions June amber",
+    "http_status": 200,
+    "results": [
+      {
+        "name": "observatory-audio.wav",
+        "location": "time 00:00:00.000 \u2013 00:00:05.840",
+        "excerpt": "Local speech transcript (may contain recognition errors): This is a synthetic observatory recording. The telescope recorded 18 sessions in June.",
+        "preview_count": 0
+      },
+      {
+        "name": "observatory-audio.wav",
+        "location": "time 00:00:06.720 \u2013 00:00:09.088",
+        "excerpt": "Local speech transcript (may contain recognition errors): The project code is amber.",
+        "preview_count": 0
+      }
+    ]
+  },
+  "video": {
+    "query": "blue digital flower",
+    "http_status": 200,
+    "results": [
+      {
+        "name": "observatory-video.mp4",
+        "location": "time 00:00:00.000",
+        "excerpt": "Local sampled-frame description (not verified): A vertical, high-contrast image features a single flower head atop a long, thin stem against a solid black background. The flower is rendered in a digital, pixelated aesthetic, appearing as a glowing blue and green mosaic of small squares. The petals are layered and rounded, with the top portion glowing intensely in bright blue and the lower petals transitioning into a pale green. A small, dried leaf-like structure is attached to the stem just below the bloom.",
+        "preview_count": 1
+      },
+      {
+        "name": "observatory-video.mp4",
+        "location": "time 00:00:06.800 \u2013 00:00:08.800",
+        "excerpt": "Local speech transcript (may contain recognition errors): The project code is amber.",
+        "preview_count": 1
+      },
+      {
+        "name": "observatory-video.mp4",
+        "location": "time 00:00:00.000 \u2013 00:00:03.280",
+        "excerpt": "Local speech transcript (may contain recognition errors): This is a synthetic observatory recording.",
+        "preview_count": 1
+      },
+      {
+        "name": "observatory-video.mp4",
+        "location": "time 00:00:03.280 \u2013 00:00:06.800",
+        "excerpt": "Local speech transcript (may contain recognition errors): The telescope recorded 18 sessions in June.",
+        "preview_count": 1
+      }
+    ]
+  }
+}

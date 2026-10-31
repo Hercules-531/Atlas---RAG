@@ -15,9 +15,10 @@ def start():
     if not binary.exists():
         print('llama-server not found. Configure ATLAS_LLAMA_SERVER and local model paths.'); return
     cache=Path.home()/'.cache/huggingface/hub'
-    candidates=list(cache.glob('models--unsloth--gemma-4-E4B-it-qat-GGUF/snapshots/*/gemma-4-E4B-it-qat-UD-Q4_K_XL.gguf'))
+    candidates=list(cache.glob('models--unsloth--gemma-4-12B-it-qat-GGUF/snapshots/*/gemma-4-12B-it-qat-UD-Q4_K_XL.gguf'))
     override=os.getenv('ATLAS_LOCAL_GGUF')
     llm=Path(override) if override else next(iter(candidates),None)
+    projector=Path(os.getenv('ATLAS_LOCAL_MMPROJ',str(llm.parent/'mmproj-F16.gguf') if llm else 'missing-projector'))
     embed=DATA/'models/embeddinggemma-2-F32.gguf'
     env=os.environ.copy()
     cuda_lib=Path.home()/'.unsloth/studio/unsloth_studio/Lib/site-packages/torch/lib'
@@ -34,7 +35,13 @@ def start():
                              (8766,llm,['--device','CUDA0','-ngl','99'] if gpu else ['-ngl','0'])]:
         if listening(port) or path is None or not path.exists(): continue
         log=(DATA/f'model-{port}.log').open('w',encoding='utf-8')
-        command=[str(binary),'-m',str(path),'--host','127.0.0.1','--port',str(port),'-c','8192','--parallel','1','--no-warmup']+extra
+        context='8192' if port==8767 else '4096'
+        command=[str(binary),'-m',str(path),'--host','127.0.0.1','--port',str(port),'-c',context,'--parallel','1','--no-warmup']
+        if port==8766:
+            command+=['--alias',os.getenv('ATLAS_LOCAL_MODEL','gemma-4-12B-it-qat')]
+            if projector.exists():command+=['--mmproj',str(projector),'--no-mmproj-offload','--image-max-tokens','512']
+            if gpu:command+=['--flash-attn','on','--cache-type-k','q8_0','--cache-type-v','q8_0']
+        command+=extra
         process=subprocess.Popen(command,stdout=log,stderr=log,env=env,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
         atexit.register(lambda p=process: p.terminate() if p.poll() is None else None)
         print(f'Local model server {port}: {path.name}',flush=True)

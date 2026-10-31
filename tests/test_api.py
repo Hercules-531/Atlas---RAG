@@ -132,3 +132,19 @@ def test_image_metadata_is_added_after_text_generation(client,tmp_path):
         assert result['receipt']['source_images_sent_to_model'] is False
         assert len(result['citations'][0]['images'])==1
         assert '/images/' not in json.dumps(result['receipt']['sent'])
+
+def test_media_upload_formats_are_accepted(client):
+    with patch.object(module.ingest,'ingest'):
+        for name in ['image.png','audio.wav','video.mp4']:
+            assert client.post('/api/files',files={'file':(name,b'synthetic format fixture')}).status_code==200
+
+def test_media_search_never_invokes_llm(client):
+    with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('media','sound.wav','unused','ready'))
+    with patch.object(module.ingest,'retrieve',return_value=[]),patch.object(module.llm,'generate') as generate:
+        assert client.get('/api/search?q=telescope&kind=audio').json()==[]
+        generate.assert_not_called()
+
+def test_reindex_uses_the_running_owner_process(client):
+    with patch.object(module.ingest,'reindex',return_value=[]) as rebuild:
+        assert client.post('/api/reindex',json={'document_ids':['one']}).json()==[]
+        rebuild.assert_called_once_with(['one'])

@@ -23,6 +23,8 @@ dependencies = [
     "reportlab",
     "pytest",
     "pymupdf>=2.0",
+    "faster-whisper>=1.2.1",
+    "av>=16,<17",
 ]
 
 [project.scripts]

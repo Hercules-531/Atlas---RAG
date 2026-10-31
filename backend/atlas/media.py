@@ -1,4 +1,4 @@
-"""Local source previews only. Images never enter embedding or LLM payloads."""
+"""Local source previews; optional local media captioning is handled separately."""
 import hashlib
 import io
 import json
@@ -14,7 +14,7 @@ from .config import setting
 
 MEDIA_VERSION=1
 LOCK=threading.RLock()
-SUPPORTED={'.pdf','.docx','.xlsx'}
+SUPPORTED={'.pdf','.docx','.xlsx','.png','.jpg','.jpeg','.webp','.gif'}
 REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships'
 
 def folder(path):
@@ -41,7 +41,9 @@ def _rels(archive,part):
     return result
 
 def _images(path):
-    if path.suffix.lower()=='.pdf':
+    if path.suffix.lower() in {'.png','.jpg','.jpeg','.webp','.gif'}:
+        yield path.read_bytes(),'image 1','uploaded_image'
+    elif path.suffix.lower()=='.pdf':
         import pymupdf as fitz
         with fitz.open(path) as doc:
             if doc.is_encrypted:raise ValueError('Encrypted PDFs cannot provide previews')
@@ -149,11 +151,21 @@ def read(path):
 
 def for_location(path,location,document_id):
     result=[]
+    manifest_images=read(path)['images']
+    if location.startswith('time '):
+        m=re.search(r'time (\d+):(\d+):([\d.]+)',location)
+        timed=[i for i in manifest_images if 'timestamp' in i]
+        if m and timed:
+            seconds=int(m[1])*3600+int(m[2])*60+float(m[3])
+            manifest_images=[min(timed,key=lambda i:abs(i['timestamp']-seconds))]
+            return [{k:v for k,v in i.items() if k!='filename'}|{'url':f'/api/files/{document_id}/images/{i["id"]}'} for i in manifest_images]
     page=re.search(r'page (\d+)',location)
     paragraph_numbers=[int(n) for n in re.findall(r'paragraph (\d+)',location)]
-    for item in read(path)['images']:
+    for item in manifest_images:
         match=item['location']==location
         if page:match=item['location']=='page '+page[1]
+        elif location.startswith('time '):
+            match=item['location']==location or location.startswith(item['location']+' ')
         elif paragraph_numbers:
             p=re.search(r'paragraph (\d+)',item['location'])
             match=bool(p and min(paragraph_numbers)<=int(p[1])<=max(paragraph_numbers))

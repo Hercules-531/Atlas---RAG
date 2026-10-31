@@ -21,9 +21,9 @@ Use **Load demo data** in Add documents. Wait for files to become ready. Select 
 
 ## Local models: reuse Unsloth
 
-The launcher detects the existing Unsloth llama.cpp runtime under `~/.unsloth/llama.cpp/build/bin/Release/` and cached `gemma-4-E4B-it-qat-UD-Q4_K_XL.gguf` weights. It never downloads an LLM automatically.
+The launcher detects the existing Unsloth llama.cpp runtime under `~/.unsloth/llama.cpp/build/bin/Release/` and cached `gemma-4-12B-it-qat-UD-Q4_K_XL.gguf` weights. It never downloads an LLM automatically.
 
-- Generation: existing Gemma 4 E4B, loopback port **8766**, explicitly offloaded to **CUDA0** when available. The launcher adds existing Unsloth CUDA DLLs to the child process search path; it does not change the machine-wide PATH. Missing CUDA falls back locally to CPU and logs that state.
+- Generation: existing Gemma 4 12B, loopback port **8766**, explicitly offloaded to **CUDA0** when available. The launcher adds existing Unsloth CUDA DLLs to the child process search path; it does not change the machine-wide PATH. Missing CUDA falls back locally to CPU and logs that state.
 - Embeddings: existing EmbeddingGemma 2 GGUF converted locally to **F32**, CPU inference with F32 KV types, loopback port **8767**. This text-only model has 768-dimensional outputs; vectors are validated and normalized.
 - Conversion from cached F16 weights to F32 avoids FP16 runtime arithmetic but **does not recover any precision already lost in the source weights**. Retrieval quality must be measured. Source weights are left untouched.
 - Without compatible cached GGUF/runtime assets, `setup-models` downloads the official SentenceTransformers model; unused vision/audio encoders are disabled during load. Inference uses BF16 where supported or FP32. No FP16 or remote embedding fallback.
@@ -96,7 +96,7 @@ Answer citations are keyboard-accessible links to local evidence cards. Each car
 
 ## Source images and mode-aware backgrounds
 
-Atlas displays local previews from embedded PDF, DOCX and XLSX images alongside cited answers. PDF pages containing vector drawings can provide an explicitly labelled page preview. Previews are matched by cited page, paragraph range or spreadsheet image-anchor row; this is **not semantic image retrieval or image understanding**. The text-only embedding model and LLM do not receive image pixels, image URLs or base64 image payloads. Image-only documents can expose their local previews, but their contents are not OCR-transcribed or analyzed.
+Atlas displays local previews from embedded PDF, DOCX and XLSX images alongside cited answers. PDF pages containing vector drawings can provide an explicitly labelled page preview. Previews are matched by cited page, paragraph range or spreadsheet image-anchor row; this is **not semantic image retrieval or image understanding**. The embedding model and cloud answer model receive text only. Standalone uploaded images/video can be described by local Gemma 12B as detailed below; embedded-document previews are not automatically analyzed. Image-only documents can expose their local previews, but their contents are not OCR-transcribed or analyzed.
 
 Previews are normalized to JPEG, bounded to 2048 pixels on the longest edge, capped at 40 per source, 20 million decoded input pixels per image, and 24 MiB total preview storage. Limits live in config/app.toml. Previews and their manifest live under the ignored uploads/media directory. File deletion removes them; missing/deleted source IDs return 404. Existing history can resolve newly indexed previews through local source IDs. External Office image relationships are skipped; web image links are never fetched. Office vector objects and native spreadsheet charts are not rendered.
 
@@ -108,6 +108,36 @@ uv run atlas index-images
 
 The included illustrated-report.pdf is a synthetic chart example. Select it and ask “How many telescope sessions were recorded in June?” to see its original embedded chart with the cited text answer.
 
-The product display name comes from config/app.toml and is now **Atlas**. Side panels animate in and out over 240 ms; the paper is warmer brown/mustard. Privacy mode crossfades to the supplied Orbit-study(4).gif animation, locally converted to a pausable MP4 with a static first-frame poster. The original GIF is retained locally in the project assets. Local mode crossfades every 36 seconds among Starry Night, Wanderer above the Sea of Fog and Water Lilies, retaining the texture of the original public-domain reproductions. Mode/gallery fades take 1.8 seconds. Artwork attribution is in frontend/public/ATTRIBUTION.txt. Reduced motion stops autoplay and uses the static poster; visibility handlers pause playback/rotation when hidden. Backgrounds are served locally, never hotlinked.
+The product display name comes from config/app.toml and is now **Atlas**. Side panels animate in and out over 240 ms; the paper is warmer brown/mustard. Privacy mode crossfades to the supplied Orbit-study(4).gif animation, locally converted to a pausable MP4 with a static first-frame poster. The original GIF is retained locally in the project assets. Local mode crossfades every 18 seconds among a 1662 Blaeu world map, Wanderer above the Sea of Fog and Water Lilies, retaining the texture of the original public-domain reproductions. Mode/gallery fades take 0.9 seconds. Artwork attribution is in frontend/public/ATTRIBUTION.txt. Reduced motion stops autoplay and uses the static poster; visibility handlers pause playback/rotation when hidden. Backgrounds are served locally, never hotlinked.
 
 See reports/SOURCE-IMAGES-AND-BACKGROUNDS.md for measured validation. Prior evaluation reports remain historical; no new cloud-answer accuracy or cost claim is inferred from this feature.
+
+
+## Uploaded image, video and audio search
+
+Upload PNG/JPEG/WebP/GIF images; MP4/WebM/MOV/MKV videos; and WAV/MP3/M4A/OGG/FLAC/AAC audio through **Add documents → Upload files**. **Search media** opens local semantic search with image/video/audio filters, previews, timestamped text and local playback. The main ask bar can also answer using indexed media text.
+
+- **Images:** cached Gemma 4 12B and its local vision projector generate a short visual description. GIFs use the first frame. Captions can miss or invent details and are labelled machine-generated, not verified OCR.
+- **Video:** at most eight frames are sampled over a clip; Gemma describes those frames locally. Speech is transcribed locally if present. This does not inspect every frame or provide exhaustive action recognition.
+- **Audio:** local Whisper base produces speech transcripts with approximate timestamps bounded to clip duration. Audio search is speech-based; it does not identify arbitrary music or sound effects.
+- Captions/transcripts are embedded using the same local text-only EmbeddingGemma 2 and indexed in local Chroma/SQLite. This is caption/transcript search, not direct pixel or acoustic-vector retrieval.
+- Raw media and previews are not sent to Prune. In Privacy mode, selected caption/transcript text can be sent only through the normal minimization/consent pipeline. Local caption requests are audited and use the documented local-Prune-routing exception.
+- Limits: 100 MiB uploads, 15-minute clips, up to eight sampled video frames. Media processing shares the existing supervised parser deadline. **Retry indexing** is available after setup failures or cancellation. Browser playback depends on installed codec support; original local files can still be opened/downloaded.
+
+One-time speech setup (local model assets; no paid ASR service):
+
+```powershell
+uv run atlas setup-media
+```
+
+The existing 12B GGUF and `mmproj-F16.gguf` are reused. Generation uses CUDA0 with a 4096-token context and Q8 KV cache; the projector is kept on CPU to preserve GPU headroom. The F16 projector is not the embedding model: EmbeddingGemma 2 inference remains FP32 on CPU. `ATLAS_LOCAL_GGUF`, `ATLAS_LOCAL_MMPROJ`, and `ATLAS_LOCAL_MODEL` can override local assets; keep the model label consistent with the actual GGUF. Media captions and ordinary local answers now use `gemma-4-12B-it-qat`.
+
+The `faster-whisper` release requires a compatible PyAV; this project pins PyAV 16.x after testing revealed the removed `metadata_errors` argument in PyAV 19. Models load from local files at runtime. If `uv sync` removes the separately installed NER wheel, `atlas setup-models` now reuses its cached local wheel.
+
+Reindexing while the app is running delegates to its owning process (`POST /api/reindex`), avoiding cross-process embedded-Chroma writers. `atlas reindex --document-id ID` can rebuild just one source. Keep the app running for CLI reindexing so its embedding server is available.
+
+## Current background and paper behavior
+
+The first Local scene is a high-resolution Joan Blaeu world map (1662), replacing Van Gogh in the carousel. Rotation is now **18 seconds**, with **900 ms** crossfades—half the previous interval and fade time. Privacy alternates the supplied glitchy flower on OLED black with the supplied night-sky video. The flower is positioned behind the ask bar. Reduced motion stops automatic cycling/video. The search bar changes width only; its height remains 52 px. The paper now uses a more visible neutral fiber texture blended with the warm paper theme.
+
+See reports/GEMMA12B-MULTIMODAL.md for measured checks. Earlier reports describe earlier implementations and were not reinterpreted as new accuracy/cost measurements.

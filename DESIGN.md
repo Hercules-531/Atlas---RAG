@@ -8,3 +8,6 @@ Colors, materials, typography and motion tokens live in frontend/src/theme/token
 
 
 The current product name is Atlas, supplied by backend configuration. Paper shifts toward brown/mustard while preserving a fine raster paper texture. Side panels retain their outgoing content until their 240 ms opacity/translation exit completes. Local mode rotates textured antique public-domain paintings with 1.8 s crossfades every 36 s. Privacy mode uses the locally supplied Orbit animation through a pausable video, with a static reduced-motion poster. Credits follow the active scene. Source previews are presented as figures below the answer and explicitly labelled as local material, not model image analysis.
+
+
+Current refinement: the search control interpolates width inside a fixed 52 px-high, layout-contained form so text and icons retain their proportions. Its width-transition lint warning is an intentional, bounded exception for the requested horizontal-only behavior. Paper now has visible neutral fiber grain in multiply blending. Local rotation starts with the 3840px Blaeu map instead of Van Gogh; both gallery rotation (18 s) and fades (900 ms) are halved. Privacy alternates a centered supplied flower behind the ask bar on black with the supplied night-sky video. Media search has a separate type-filtered local panel with timestamped excerpts and playback.

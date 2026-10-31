@@ -1,0 +1,14 @@
+{
+  "transcripts": [
+    [
+      "Local speech transcript (may contain recognition errors): This is a synthetic observatory recording. The telescope recorded 18 sessions in June.",
+      "time 00:00:00.000 \u2013 00:00:05.840"
+    ],
+    [
+      "Local speech transcript (may contain recognition errors): The project code is amber.",
+      "time 00:00:06.720 \u2013 00:00:09.088"
+    ]
+  ],
+  "python_network_connection_attempts": 0,
+  "scope": "Python-owned socket attempts during local ASR; not OS-wide tracing"
+}

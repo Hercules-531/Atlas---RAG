@@ -7,12 +7,16 @@ from .config import ROOT, directories
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument('command',choices=['dev','serve','setup-models','demo','eval','reindex','index-images'])
+    parser.add_argument('command',choices=['dev','serve','setup-models','setup-media','demo','eval','reindex','index-images'])
     parser.add_argument('--live',action='store_true')
     parser.add_argument('--synthetic-full-context',action='store_true')
     parser.add_argument('--resume',action='store_true')
+    parser.add_argument('--document-id',action='append')
     args=parser.parse_args(); directories()
-    if args.command=='setup-models':
+    if args.command=='setup-media':
+        from .multimodal import setup
+        print('Local speech model:',setup())
+    elif args.command=='setup-models':
         from .config import DATA
         from pathlib import Path
         converted=DATA/'models/embeddinggemma-2-F32.gguf'
@@ -28,6 +32,11 @@ def main():
             print(json.dumps(setup()))
         import importlib.util
         if not importlib.util.find_spec('en_core_web_sm'):
+            cached=list((DATA/'models').glob('en_core_web_sm-*-py3-none-any.whl'))
+            if cached:
+                subprocess.run(['uv','pip','install','--python',sys.executable,'--no-deps',str(cached[-1])],check=True)
+                print('Reused cached local NER model.')
+                return
             result=subprocess.run(['uv','pip','install','--python',sys.executable,'https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl'])
             if result.returncode:
                 import urllib.request
@@ -46,7 +55,15 @@ def main():
     elif args.command=='reindex':
         from .ingest import reindex
         from .store import init
-        init();print(json.dumps(reindex(),indent=2))
+        import httpx
+        try:
+            with httpx.Client(trust_env=False,timeout=1800) as client:
+                health=client.get('http://127.0.0.1:8765/api/config',timeout=3)
+                health.raise_for_status()
+                response=client.post('http://127.0.0.1:8765/api/reindex',json={'document_ids':args.document_id})
+                response.raise_for_status();print(json.dumps(response.json(),indent=2))
+        except httpx.ConnectError:
+            init();print(json.dumps(reindex(args.document_id),indent=2))
     elif args.command=='demo':
         from .demo import build
         build(); print('Synthetic demo datasets generated')

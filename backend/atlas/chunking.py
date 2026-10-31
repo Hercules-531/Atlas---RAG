@@ -53,7 +53,7 @@ def parents(records):
         return '\n'.join(buffer), ' – '.join(distinct if len(distinct)<3 else [distinct[0],distinct[-1]])
     for text,location in records:
         record=is_record(text)
-        independent=record or location.startswith('page ')
+        independent=record or location.startswith(('page ','time ','image '))
         if buffer and (independent or count+len(text.split())>900):
             yield flush();buffer=[];locations=[];count=0
         if independent:

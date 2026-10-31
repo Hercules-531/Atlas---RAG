@@ -15,6 +15,7 @@ from .store import init, db, rows
 from . import ingest, embeddings, privacy, llm
 from .calculations import operation,calculate
 from . import media
+from .multimodal import IMAGES,VIDEOS,AUDIO,SUPPORTED as MEDIA_TYPES
 
 init()
 app=FastAPI(title=APP_NAME)
@@ -62,6 +63,31 @@ def config():
 def files():
     return rows('SELECT id,name,status,error,progress FROM documents ORDER BY rowid DESC')
 
+@app.get('/api/search')
+def search(q:str,kind:Literal['all','image','video','audio']='all'):
+    if not q.strip() or len(q)>4000:raise HTTPException(400,'Enter a search query of 1–4000 characters')
+    extensions={'image':IMAGES,'video':VIDEOS,'audio':AUDIO,'all':MEDIA_TYPES}[kind]
+    docs=[d['id'] for d in files() if d['status']=='ready' and Path(d['name']).suffix.lower() in extensions]
+    if not docs:return []
+    try:
+        found=ingest.retrieve(q,docs);result=[]
+        for hit in found:
+            source=rows('SELECT path FROM documents WHERE id=?',(hit['document_id'],))[0]
+            ext=Path(hit['name']).suffix.lower();media_type='image' if ext in IMAGES else 'video' if ext in VIDEOS else 'audio'
+            result.append({'id':hit['id'],'document_id':hit['document_id'],'name':hit['name'],'kind':media_type,
+                'location':hit['location'],'excerpt':hit['text'],'images':media.for_location(Path(source['path']),hit['location'],hit['document_id']),
+                'url':f'/api/files/{hit["document_id"]}/content'})
+        return result
+    except Exception as exc:raise HTTPException(400,str(exc)) from exc
+
+class ReindexRequest(BaseModel):
+    document_ids:list[str]|None=None
+
+@app.post('/api/reindex')
+def reindex_files(request:ReindexRequest):
+    # Embedded Chroma must have one owning writer process. CLI maintenance delegates here.
+    return ingest.reindex(request.document_ids)
+
 @app.get('/api/files/{docid}/content')
 def original_source(docid:str):
     found=rows('SELECT * FROM documents WHERE id=?',(docid,))
@@ -102,8 +128,8 @@ async def upload(file:UploadFile=File(...)):
     directories(); docid=uuid.uuid4().hex
     name=Path(file.filename or 'upload').name
     ext=Path(name).suffix.lower()
-    if ext not in ('.pdf','.docx','.txt','.md','.csv','.xlsx','.json'):
-        raise HTTPException(415,'Supported formats: PDF DOCX TXT MD CSV XLSX JSON')
+    if ext not in {'.pdf','.docx','.txt','.md','.csv','.xlsx','.json'}|MEDIA_TYPES:
+        raise HTTPException(415,'Unsupported format. Upload a document, image, video or audio file.')
     path=DATA/'uploads'/(docid+ext)
     total=0
     try:
@@ -129,6 +155,15 @@ def cancel(docid:str):
     ingest.CANCELLED.add(docid)
     ingest.update(docid,'cancelled','Cancelled by user')
     return {'status':'cancellation requested'}
+
+@app.post('/api/files/{docid}/retry')
+def retry_file(docid:str):
+    found=rows('SELECT status FROM documents WHERE id=?',(docid,))
+    if not found:raise HTTPException(404,'File not found')
+    if found[0]['status'] not in ('error','cancelled'):raise HTTPException(409,'Only failed or cancelled files can be retried')
+    ingest.CANCELLED.discard(docid);ingest.update(docid,'queued')
+    threading.Thread(target=ingest.ingest,args=(docid,),daemon=True).start()
+    return {'status':'queued'}
 
 @app.delete('/api/files/{docid}')
 def delete_file(docid:str):
@@ -203,7 +238,8 @@ def _execute(query,plan):
     audit_records=[json.loads(p.read_text(encoding='utf-8')) for p in (DATA/'audit').glob('*.json')]
     external=sum(bool(r['external']) for r in audit_records if r['session']==query.session)
     receipt={'audit_id':generated['audit_id'],'sent':json.loads(generated['payload']),
-        'source_images_sent_to_model':False,'source_images_scope':'Local previews matched by cited page/section; not image understanding',
+        'source_images_sent_to_model':False,'raw_media_sent_to_cloud':False,
+        'source_images_scope':'No raw media attached to this answer request. Uploaded media can have local Gemma visual descriptions or local Whisper speech transcripts; these can contain errors.',
         'withheld':[{k:v for k,v in item.items() if k!='value'} for item in plan['withheld']],
         'withheld_local':plan['withheld'],'not_retrieved_chunks':max(0,len(corpus)-len(plan['citations'])),
         'tokens_sent_estimate':sent_tokens,'full_document_tokens_estimate':full_tokens,

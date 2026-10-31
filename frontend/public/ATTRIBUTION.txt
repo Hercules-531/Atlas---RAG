@@ -15,3 +15,14 @@ Privacy background:
 Orbit-study(4).gif supplied locally by the user, copied as backgrounds/orbit.gif.
 Converted locally to orbit.mp4 for pausable, reduced-motion-aware playback; orbit-poster.jpg is its first frame.
 This user-supplied animation is not represented as public-domain artwork.
+
+
+Current local first scene (replaces Van Gogh in the active carousel):
+Joan Blaeu / Van der Hem, Weltkarte Atlas Blaeuw, 1662.
+Public-domain source: https://commons.wikimedia.org/wiki/File:Weltkarte_Atlas_Blaeuw.jpg
+3840px local reproduction: backgrounds/antique-map.jpg.
+
+Current Privacy scenes (user-supplied; not represented as public domain):
+glitchy flower cleared.png -> backgrounds/privacy-flower.png
+12336972-hd_1920_1028_60fps.mp4 -> backgrounds/privacy-cycle.mp4
+privacy-cycle-poster.jpg is a locally extracted first frame. These replace the older Orbit scene in the active catalog.

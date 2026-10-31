@@ -17,6 +17,10 @@ CANCELLED = set()
 
 def extract(path):
     ext = path.suffix.lower()
+    from .multimodal import SUPPORTED,extract as extract_media
+    if ext in SUPPORTED:
+        yield from extract_media(path)
+        return
     if ext in ('.xlsx', '.docx'):
         with zipfile.ZipFile(path) as z:
             if sum(i.file_size for i in z.infolist()) > setting('max_archive_mib') * 1048576:
@@ -186,9 +190,10 @@ def retrieve(question,document_ids=None):
     from .retrieval import retrieve as hybrid
     return hybrid(question,document_ids)
 
-def reindex():
+def reindex(document_ids=None):
     """Rebuild only the index; preserve uploaded originals and prior receipts/history."""
     documents=rows('SELECT id FROM documents WHERE status IN ("ready","error")')
+    if document_ids is not None:documents=[d for d in documents if d['id'] in document_ids]
     for document in documents:
         docid=document['id'];CANCELLED.discard(docid)
         with LOCK:

@@ -11,3 +11,5 @@ session_tokens = 50000
 max_source_images = 40
 max_source_image_pixels = 20000000
 max_source_image_mib = 24
+max_media_seconds = 900
+max_video_frames = 8
