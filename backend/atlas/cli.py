@@ -12,10 +12,11 @@ def main():
     parser.add_argument('--synthetic-full-context',action='store_true')
     parser.add_argument('--resume',action='store_true')
     parser.add_argument('--document-id',action='append')
+    parser.add_argument('--speech-model',choices=['base','turbo'],default='turbo')
     args=parser.parse_args(); directories()
     if args.command=='setup-media':
         from .multimodal import setup
-        print('Local speech model:',setup())
+        print('Local speech model:',setup(args.speech_model))
     elif args.command=='setup-models':
         from .config import DATA
         from pathlib import Path

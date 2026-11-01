@@ -1,0 +1,28 @@
+{
+  "synthetic_input": true,
+  "english_default": true,
+  "microphone_options": 3,
+  "exact_device_used": true,
+  "raw_filters_disabled": true,
+  "meter_dbfs": -32.59396060791275,
+  "all_tracks_ended": true,
+  "dictation_requests": 0,
+  "external_requests": 0,
+  "mobile_card_visible": true,
+  "notes": "Chromium fake microphone; real user microphone and accent not recorded.",
+  "end_to_end": {
+    "model": "whisper-large-v3-turbo",
+    "synthetic_clip_seconds": 9,
+    "elapsed_seconds_including_worker_and_model_load": 8.127,
+    "vocabulary_reached_local_asr": true,
+    "dictation_requests": 1,
+    "external_browser_requests": 0,
+    "automatic_question_requests": 0,
+    "disconnected_device_failed_without_fallback": true
+  },
+  "popover_scroll": {
+    "scrollable": true,
+    "background_zoom_unchanged": true,
+    "answer_drawer_unchanged": true
+  }
+}

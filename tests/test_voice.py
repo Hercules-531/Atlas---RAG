@@ -31,7 +31,7 @@ def test_supported_language_codes_match_installed_whisper():
 
 
 def test_language_hint_preserves_text_instead_of_translating(monkeypatch):
-    monkeypatch.setattr(voice,'decode_recording',lambda _:np.zeros(64000,dtype=np.float32))
+    monkeypatch.setattr(voice,'decode_recording',lambda _:(.1*np.sin(np.arange(64000)*.1)).astype(np.float32))
     model=SimpleNamespace(transcribe=lambda *a,**k:([SimpleNamespace(text=' नीला फूल ')],SimpleNamespace(language='hi')))
     with patch.object(model,'transcribe',wraps=model.transcribe) as call:
         monkeypatch.setattr(multimodal,'speech_model',lambda:model)
@@ -41,7 +41,7 @@ def test_language_hint_preserves_text_instead_of_translating(monkeypatch):
 
 
 def test_auto_language_and_empty_audio(monkeypatch):
-    monkeypatch.setattr(voice,'decode_recording',lambda _:np.zeros(16000,dtype=np.float32))
+    monkeypatch.setattr(voice,'decode_recording',lambda _:(.1*np.sin(np.arange(16000)*.1)).astype(np.float32))
     with patch.object(multimodal,'speech_model') as model:
         model.return_value.transcribe.return_value=([],SimpleNamespace(language='en'))
         with pytest.raises(ValueError,match='No intelligible'):voice.transcribe('silence.wav','auto')
@@ -134,3 +134,58 @@ def test_worker_success_is_ephemeral(local_voice,monkeypatch):
     monkeypatch.setattr(voice.mp,'get_context',lambda _:SimpleNamespace(Process=Process))
     result=voice.recognize(io.BytesIO(b'a'),'audio.webm','hi')
     assert result['text']=='नीला फूल' and not list((local_voice/'dictation').iterdir())
+
+
+def test_quiet_speech_gets_bounded_gain_without_waveform_rewriting():
+    original=(.003*np.sin(np.arange(16000)*.1)).astype(np.float32)
+    prepared,stats,warnings=voice.prepare_audio(original+.01)
+    assert 17.9<=stats['gain_db']<=18
+    assert np.corrcoef(original,prepared)[0,1]>.99999
+    assert abs(float(prepared.mean()))<.00001 and np.max(np.abs(prepared))<1
+    assert warnings and stats['rms_dbfs']< -40
+
+
+def test_clipping_is_disclosed_and_not_amplified():
+    _,stats,warnings=voice.prepare_audio(np.tile([1.,-1.],8000))
+    assert stats['clipped_fraction']==1 and stats['gain_db']==0
+    assert any('clipping' in w for w in warnings)
+
+
+@pytest.mark.parametrize('samples',[np.zeros(16000),np.ones(16000)*.02,np.sin(np.arange(16000))*.00001])
+def test_silence_dc_and_inaudible_signal_fail_before_model(monkeypatch,samples):
+    monkeypatch.setattr(voice,'decode_recording',lambda _:samples)
+    with patch.object(multimodal,'speech_model') as model:
+        with pytest.raises(ValueError,match='too quiet'):voice.transcribe('bad.wav','en')
+        model.assert_not_called()
+
+
+def test_weak_transcript_is_not_inserted_and_vocabulary_stays_local(monkeypatch):
+    monkeypatch.setattr(voice,'decode_recording',lambda _:.1*np.sin(np.arange(16000)*.1))
+    segment=SimpleNamespace(text='words that were not clear',avg_logprob=-1.5)
+    with patch.object(multimodal,'speech_model') as model:
+        model.return_value.transcribe.return_value=([segment],SimpleNamespace(language='en'))
+        with pytest.raises(ValueError,match='not clear enough'):voice.transcribe('audio.wav','en','DreamDiffusion, Prune')
+        assert model.return_value.transcribe.call_args.kwargs['hotwords']=='DreamDiffusion, Prune'
+        assert model.return_value.transcribe.call_args.kwargs['vad_parameters']['speech_pad_ms']==350
+
+
+def test_partial_turbo_is_not_selected_and_explicit_override_is_respected(local_voice,monkeypatch):
+    turbo=local_voice/'models/whisper-large-v3-turbo';turbo.mkdir()
+    (turbo/'model.bin').touch()
+    assert multimodal.speech_path().name=='whisper-base'
+    for name in ('config.json','tokenizer.json','vocabulary.json'):(turbo/name).touch()
+    assert multimodal.speech_path()==turbo
+    monkeypatch.setenv('ATLAS_SPEECH_MODEL_DIR',str(local_voice/'missing-custom-model'))
+    assert not multimodal.speech_ready() and multimodal.speech_path().name=='missing-custom-model'
+
+
+def test_vocabulary_cap_prevents_unbounded_prompt(local_voice):
+    with pytest.raises(ValueError,match='500'):voice.recognize(io.BytesIO(b'a'),'audio.webm','en','a'*501)
+
+
+def test_token_dense_vocabulary_leaves_room_for_speech_decoding(monkeypatch):
+    monkeypatch.setattr(voice,'decode_recording',lambda _:.1*np.sin(np.arange(16000)*.1))
+    with patch.object(multimodal,'speech_model') as model:
+        model.return_value.hf_tokenizer.encode.return_value.ids=list(range(97))
+        with pytest.raises(ValueError,match='shorter list'):voice.transcribe('audio.wav','en','technical terms')
+        model.return_value.transcribe.assert_not_called()

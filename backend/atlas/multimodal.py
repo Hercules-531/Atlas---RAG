@@ -49,11 +49,15 @@ def caption(path,session):
     return result['answer']
 
 def speech_path():
-    return Path(os.getenv('ATLAS_SPEECH_MODEL_DIR') or DATA/'models/whisper-base').expanduser().resolve()
+    override=os.getenv('ATLAS_SPEECH_MODEL_DIR')
+    if override:return Path(override).expanduser().resolve()
+    turbo=DATA/'models/whisper-large-v3-turbo'
+    return (turbo if complete_speech_assets(turbo) else DATA/'models/whisper-base').resolve()
 
-def speech_ready():
-    path=speech_path()
+def complete_speech_assets(path):
     return all((path/name).is_file() for name in ('model.bin','config.json','tokenizer.json')) and any((path/name).is_file() for name in ('vocabulary.txt','vocabulary.json'))
+
+def speech_ready():return complete_speech_assets(speech_path())
 
 @lru_cache
 def speech_model():
@@ -108,7 +112,9 @@ def extract(path):
         if ext in AUDIO and not spoken:raise ValueError('No intelligible speech detected. Audio search indexes speech, not music or sound effects.')
     manifest_path.write_text(json.dumps(manifest),encoding='utf-8')
 
-def setup():
+def setup(model='turbo'):
     from huggingface_hub import snapshot_download
-    return snapshot_download('Systran/faster-whisper-base',local_dir=DATA/'models/whisper-base',
-        allow_patterns=['config.json','model.bin','tokenizer.json','vocabulary*'])
+    repo='dropbox-dash/faster-whisper-large-v3-turbo' if model=='turbo' else 'Systran/faster-whisper-base'
+    folder='whisper-large-v3-turbo' if model=='turbo' else 'whisper-base'
+    return snapshot_download(repo,local_dir=DATA/'models'/folder,
+        allow_patterns=['config.json','model.bin','tokenizer.json','vocabulary*','preprocessor_config.json'])

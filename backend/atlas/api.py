@@ -6,7 +6,7 @@ import uuid
 import mimetypes
 from pathlib import Path
 from typing import Literal
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request
+from fastapi import FastAPI, File, Form, UploadFile, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -70,9 +70,9 @@ def dictation_config():
     return config()
 
 @app.post('/api/dictation')
-def dictate(file:UploadFile=File(...),language:str='auto'):
+def dictate(file:UploadFile=File(...),language:str='en',vocabulary:str=Form('')):
     from .voice import recognize,VoiceBusy
-    try:return recognize(file.file,file.filename,language)
+    try:return recognize(file.file,file.filename,language,vocabulary=vocabulary)
     except VoiceBusy as exc:raise HTTPException(429,str(exc)) from exc
     except ValueError as exc:raise HTTPException(400,str(exc)) from exc
     finally:file.file.close()

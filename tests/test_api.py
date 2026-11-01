@@ -166,9 +166,10 @@ def test_reindex_uses_the_running_owner_process(client):
 
 def test_dictation_is_local_and_does_not_invoke_llm_or_store_source(client):
     with patch('atlas.voice.recognize',return_value={'text':'नीला फूल','language':'hi','local':True}) as recognize,patch.object(module.llm,'generate') as generate:
-        response=client.post('/api/dictation?language=hi',files={'file':('voice.webm',b'fixture')})
+        response=client.post('/api/dictation?language=hi',files={'file':('voice.webm',b'fixture')},data={'vocabulary':'DreamDiffusion'})
         assert response.status_code==200 and response.json()['text']=='नीला फूल'
         assert recognize.call_args.args[2]=='hi'
+        assert recognize.call_args.kwargs['vocabulary']=='DreamDiffusion'
         generate.assert_not_called()
     assert store.rows('SELECT * FROM documents')==[]
     assert store.rows('SELECT * FROM history')==[]

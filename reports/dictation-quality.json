@@ -1,0 +1,158 @@
+{
+  "fixture": "Synthetic English TTS; not Indian-accent or real microphone speech.",
+  "gold": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is amber.",
+  "names_gold": "What is Dream Diffusion and how does retrieval augmented generation work in Atlas?",
+  "sample_rate": 16000,
+  "duration_seconds": 9.087875,
+  "profiles": [
+    {
+      "name": "before-base",
+      "model_load_seconds": 0.319,
+      "cases": [
+        {
+          "name": "clean",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is amber.",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 0.613,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "quiet_with_dc",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is Amber.",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 0.454,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "noise_5db",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is amber.",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 0.442,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "noise_0db",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is Amber.",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 0.431,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "noise_minus5db",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is Amazon.",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 0.444,
+          "word_error_rate": 0.0556
+        },
+        {
+          "name": "names",
+          "text": "What is dream diffusion and how does retrieval augmented generation work in atlas?",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 0.418,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "silence",
+          "text": "",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 0.025,
+          "invented_words": 0
+        },
+        {
+          "name": "noise_only",
+          "text": "",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 0.024,
+          "invented_words": 0
+        }
+      ]
+    },
+    {
+      "name": "after-turbo",
+      "model_load_seconds": 2.662,
+      "cases": [
+        {
+          "name": "clean",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is AMBER.",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 4.477,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "quiet_with_dc",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is AMBER.",
+          "error": null,
+          "warnings": [
+            "The microphone was quiet; bounded local gain was applied. Check the selected input."
+          ],
+          "elapsed_seconds": 4.908,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "noise_5db",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is AMBER.",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 5.022,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "noise_0db",
+          "text": "this is a synthetic observatory recording the telescope recorded 18 sessions in june the project code is amber",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 5.082,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "noise_minus5db",
+          "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is amber.",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 4.973,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "names",
+          "text": "What is Dream Diffusion and how does Retrieval Augmented Generation work in Atlas?",
+          "error": null,
+          "warnings": [],
+          "elapsed_seconds": 5.103,
+          "word_error_rate": 0.0
+        },
+        {
+          "name": "silence",
+          "text": "",
+          "error": "The microphone input is too quiet. Select the correct microphone and move closer before trying again.",
+          "warnings": [],
+          "elapsed_seconds": 0.014,
+          "invented_words": 0
+        },
+        {
+          "name": "noise_only",
+          "text": "",
+          "error": "No intelligible speech detected. Speak clearly and try again.",
+          "warnings": [],
+          "elapsed_seconds": 0.024,
+          "invented_words": 0
+        }
+      ]
+    }
+  ],
+  "model_source": {
+    "repository": "dropbox-dash/faster-whisper-large-v3-turbo",
+    "revision": "0a363e9161cbc7ed1431c9597a8ceaf0c4f78fcf",
+    "model_bin_bytes": 1617884929,
+    "model_bin_sha256": "e76620f83d5f5b69efd3d87e3dc180c1bd21df9fbebacfd4335e5e1efcc018da",
+    "runtime": "CPU int8, local_files_only=True"
+  }
+}
