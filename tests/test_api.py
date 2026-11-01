@@ -140,11 +140,46 @@ def test_media_upload_formats_are_accepted(client):
 
 def test_media_search_never_invokes_llm(client):
     with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('media','sound.wav','unused','ready'))
-    with patch.object(module.ingest,'retrieve',return_value=[]),patch.object(module.llm,'generate') as generate:
+    with patch('atlas.media_search.search',return_value=[]) as search,patch.object(module.llm,'generate') as generate:
         assert client.get('/api/search?q=telescope&kind=audio').json()==[]
+        search.assert_called_once_with('telescope',['media'],'auto')
         generate.assert_not_called()
+
+
+def test_media_speech_results_do_not_display_unrelated_frame_as_match(client):
+    with store.db() as c:c.execute('INSERT INTO documents(id,name,path,status) VALUES (?,?,?,?)',('clip','flower.mp4','unused','ready'))
+    hit={'id':'speech','document_id':'clip','name':'flower.mp4','location':'time 00:00:03.000',
+        'text':'Local speech transcript (may contain recognition errors): telescope','match_type':'speech'}
+    with patch('atlas.media_search.search',return_value=[hit]) as search,patch.object(module.media,'for_location') as preview:
+        response=client.get('/api/search?q=telescope&kind=video&content=speech')
+        assert response.status_code==200
+        assert response.json()[0]['match_type']=='speech' and response.json()[0]['images']==[]
+        preview.assert_not_called()
+        search.assert_called_once_with('telescope',['clip'],'speech')
+    assert client.get('/api/search?q=telescope&content=invalid').status_code==422
 
 def test_reindex_uses_the_running_owner_process(client):
     with patch.object(module.ingest,'reindex',return_value=[]) as rebuild:
         assert client.post('/api/reindex',json={'document_ids':['one']}).json()==[]
         rebuild.assert_called_once_with(['one'])
+
+
+def test_dictation_is_local_and_does_not_invoke_llm_or_store_source(client):
+    with patch('atlas.voice.recognize',return_value={'text':'नीला फूल','language':'hi','local':True}) as recognize,patch.object(module.llm,'generate') as generate:
+        response=client.post('/api/dictation?language=hi',files={'file':('voice.webm',b'fixture')})
+        assert response.status_code==200 and response.json()['text']=='नीला फूल'
+        assert recognize.call_args.args[2]=='hi'
+        generate.assert_not_called()
+    assert store.rows('SELECT * FROM documents')==[]
+    assert store.rows('SELECT * FROM history')==[]
+
+
+def test_dictation_limits_origins_and_busy_response(client,monkeypatch):
+    from atlas.voice import VoiceBusy
+    assert client.post('/api/dictation',headers={'Origin':'https://evil.example'}).status_code==403
+    monkeypatch.setenv('ATLAS_MAX_DICTATION_MIB','1')
+    with patch('atlas.voice.recognize') as recognize:
+        assert client.post('/api/dictation',files={'file':('voice.webm',b'a'*(1048576+65536))}).status_code==413
+        recognize.assert_not_called()
+    with patch('atlas.voice.recognize',side_effect=VoiceBusy('Try later')):
+        assert client.post('/api/dictation',files={'file':('voice.webm',b'fixture')}).status_code==429

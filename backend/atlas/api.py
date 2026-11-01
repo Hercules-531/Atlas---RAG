@@ -24,10 +24,11 @@ PENDING={}
 class UploadBodyLimit:
     def __init__(self,app):self.app=app
     async def __call__(self,scope,receive,send):
-        if scope['type']!='http' or scope.get('path')!='/api/files' or scope.get('method')!='POST':
+        if scope['type']!='http' or scope.get('path') not in ('/api/files','/api/dictation') or scope.get('method')!='POST':
             return await self.app(scope,receive,send)
         from starlette.responses import JSONResponse
-        cap=setting('max_upload_mib')*1048576+65536
+        limit='max_dictation_mib' if scope['path']=='/api/dictation' else 'max_upload_mib'
+        cap=setting(limit)*1048576+65536
         headers=dict(scope['headers'])
         if int(headers.get(b'content-length',b'0'))>cap:
             return await JSONResponse({'detail':'Upload body exceeds configured file limit'},status_code=413)(scope,receive,send)
@@ -63,19 +64,34 @@ def config():
 def files():
     return rows('SELECT id,name,status,error,progress FROM documents ORDER BY rowid DESC')
 
+@app.get('/api/dictation/config')
+def dictation_config():
+    from .voice import config
+    return config()
+
+@app.post('/api/dictation')
+def dictate(file:UploadFile=File(...),language:str='auto'):
+    from .voice import recognize,VoiceBusy
+    try:return recognize(file.file,file.filename,language)
+    except VoiceBusy as exc:raise HTTPException(429,str(exc)) from exc
+    except ValueError as exc:raise HTTPException(400,str(exc)) from exc
+    finally:file.file.close()
+
 @app.get('/api/search')
-def search(q:str,kind:Literal['all','image','video','audio']='all'):
+def search(q:str,kind:Literal['all','image','video','audio']='all',content:Literal['auto','visual','speech','all']='auto'):
     if not q.strip() or len(q)>4000:raise HTTPException(400,'Enter a search query of 1–4000 characters')
     extensions={'image':IMAGES,'video':VIDEOS,'audio':AUDIO,'all':MEDIA_TYPES}[kind]
     docs=[d['id'] for d in files() if d['status']=='ready' and Path(d['name']).suffix.lower() in extensions]
     if not docs:return []
     try:
-        found=ingest.retrieve(q,docs);result=[]
+        from .media_search import search as search_media
+        found=search_media(q,docs,content);result=[]
         for hit in found:
             source=rows('SELECT path FROM documents WHERE id=?',(hit['document_id'],))[0]
             ext=Path(hit['name']).suffix.lower();media_type='image' if ext in IMAGES else 'video' if ext in VIDEOS else 'audio'
             result.append({'id':hit['id'],'document_id':hit['document_id'],'name':hit['name'],'kind':media_type,
-                'location':hit['location'],'excerpt':hit['text'],'images':media.for_location(Path(source['path']),hit['location'],hit['document_id']),
+                'location':hit['location'],'excerpt':hit['text'],'match_type':hit['match_type'],
+                'images':media.for_location(Path(source['path']),hit['location'],hit['document_id']) if hit['match_type']=='visual' else [],
                 'url':f'/api/files/{hit["document_id"]}/content'})
         return result
     except Exception as exc:raise HTTPException(400,str(exc)) from exc
@@ -209,7 +225,7 @@ def delete_all():
 
 class Ask(BaseModel):
     question:str=Field(min_length=1,max_length=4000)
-    mode:Literal['local','privacy']='privacy'
+    mode:Literal['local','privacy']='local'
     session:str=Field(min_length=1,max_length=100)
     document_ids:list[str]=Field(default_factory=list,max_length=100)
 

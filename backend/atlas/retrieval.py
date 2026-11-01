@@ -23,9 +23,9 @@ def lexical(question,document_ids=None,limit=24):
     args.append(limit)
     return [r['chunk_id'] for r in rows('SELECT chunks_fts.chunk_id FROM chunks_fts JOIN chunks c ON c.id=chunks_fts.chunk_id JOIN documents d ON d.id=c.document_id WHERE chunks_fts MATCH ? AND d.status="ready"'+scope+' ORDER BY bm25(chunks_fts) LIMIT ?',args)]
 
-def retrieve(question,document_ids=None,method='hybrid',parent=True,compress=True):
+def retrieve(question,document_ids=None,method='hybrid',parent=True,compress=True,limit=8,focus_sources=True):
     vector=embed([question],query=True)[0]
-    dense=collection().query(query_embeddings=[vector],n_results=24,**({'where':{'document_id':{'$in':document_ids}}} if document_ids else {}))['ids'][0]
+    dense=collection().query(query_embeddings=[vector],n_results=max(24,limit),**({'where':{'document_id':{'$in':document_ids}}} if document_ids else {}))['ids'][0]
     ids=fuse(dense,lexical(question,document_ids)) if method=='hybrid' else dense
     result=[];seen=set()
     for key in ids:
@@ -37,10 +37,10 @@ def retrieve(question,document_ids=None,method='hybrid',parent=True,compress=Tru
         if parent and item['parent_text']:
             item['child_text']=item['text'];item['text']=item['parent_text'];item['location']=item['parent_location']
         result.append(item)
-        if len(result)==8:break
+        if len(result)==limit:break
     # An explicit multiword source-name match narrows ambiguous agreements/versions.
     # Names and index context remain local; evidence text is never prefixed for generation.
-    if any(c.get('index_context') for c in result):
+    if focus_sources and any(c.get('index_context') for c in result):
         from pathlib import Path
         scores=[len(terms(Path(c['name']).stem)&terms(question)) for c in result]
         best=max(scores,default=0)

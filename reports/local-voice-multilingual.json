@@ -1,0 +1,141 @@
+{
+  "dictation": {
+    "text": "This is a synthetic observatory recording. The telescope recorded 18 sessions in June. The project code is amber.",
+    "language": "en",
+    "duration_seconds": 9.087875,
+    "local": true,
+    "elapsed_seconds": 2.541,
+    "verified_fixture": "Synthetic English observatory audio",
+    "temporary_files_remaining": 0
+  },
+  "media": [
+    {
+      "language": "en",
+      "query": "blue flower",
+      "hits": [
+        "observatory-video.mp4",
+        "flower-inspection.png"
+      ]
+    },
+    {
+      "language": "hi",
+      "query": "नीला फूल",
+      "hits": [
+        "observatory-video.mp4",
+        "flower-inspection.png"
+      ]
+    },
+    {
+      "language": "bn",
+      "query": "নীল ফুল",
+      "hits": [
+        "observatory-video.mp4",
+        "flower-inspection.png"
+      ]
+    },
+    {
+      "language": "ta",
+      "query": "நீல மலர்",
+      "hits": [
+        "observatory-video.mp4",
+        "flower-inspection.png"
+      ]
+    },
+    {
+      "language": "te",
+      "query": "నీలం పువ్వు",
+      "hits": [
+        "observatory-video.mp4",
+        "flower-inspection.png"
+      ]
+    },
+    {
+      "language": "mr",
+      "query": "निळे फूल",
+      "hits": [
+        "observatory-video.mp4"
+      ]
+    },
+    {
+      "language": "gu",
+      "query": "વાદળી ફૂલ",
+      "hits": []
+    },
+    {
+      "language": "kn",
+      "query": "ನೀಲಿ ಹೂವು",
+      "hits": [
+        "observatory-video.mp4",
+        "flower-inspection.png"
+      ]
+    },
+    {
+      "language": "ml",
+      "query": "നീല പൂവ്",
+      "hits": [
+        "observatory-video.mp4",
+        "flower-inspection.png"
+      ]
+    },
+    {
+      "language": "pa",
+      "query": "ਨੀਲਾ ਫੁੱਲ",
+      "hits": [
+        "observatory-video.mp4",
+        "flower-inspection.png"
+      ]
+    },
+    {
+      "language": "ur",
+      "query": "نیلا پھول",
+      "hits": []
+    }
+  ],
+  "notes": [
+    "Synthetic English audio only; Indian-language speech accuracy not measured. Typed native-script queries tested separately."
+  ],
+  "local_document_questions": [
+    {
+      "language": "en",
+      "question": "How many days of annual leave are provided?",
+      "answer": "The annual leave entitlement is 24 days [S1].",
+      "status": "answered",
+      "cited_sources": 8,
+      "contains_24": true,
+      "external_requests": 0,
+      "elapsed_seconds": 0.7350000000005821
+    },
+    {
+      "language": "hi",
+      "question": "कर्मचारियों को साल में कितने दिन की छुट्टी मिलती है?",
+      "answer": "कर्मचारियों को साल में 24 दिन की वार्षिक छुट्टी (annual leave) मिलती है [S1]।",
+      "status": "answered",
+      "cited_sources": 8,
+      "contains_24": true,
+      "external_requests": 0,
+      "elapsed_seconds": 0.625
+    },
+    {
+      "language": "ta",
+      "question": "ஊழியர்களுக்கு ஆண்டுக்கு எத்தனை நாட்கள் விடுப்பு கிடைக்கும்?",
+      "answer": "ஊழியர்களுக்கு ஆண்டுக்கு 24 நாட்கள் விடுப்பு கிடைக்கும் [S1].",
+      "status": "answered",
+      "cited_sources": 8,
+      "contains_24": true,
+      "external_requests": 0,
+      "elapsed_seconds": 0.6880000000019209
+    }
+  ],
+  "browser": {
+    "synthetic_browser_microphone": true,
+    "browser_format": "MediaRecorder WebM/Opus",
+    "privacy_to_local_on_dictation": true,
+    "cancelled_tracks_ended": true,
+    "searches_before_review": 0,
+    "automatic_question_requests": 0,
+    "external_browser_requests": 0,
+    "mobile_horizontal_overflow": false,
+    "reviewed_search_requests": 1,
+    "notes": "Synthetic audio fixture via Chromium fake input; actual user microphone and Indian-language speech not tested."
+  }
+}

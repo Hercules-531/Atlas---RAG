@@ -4,6 +4,15 @@
 
 ## Run on this machine
 
+In VS Code, open **`run.py`** in the project root and click **Run Python File**.
+The launcher syncs dependencies, sets up missing embedding/NER models, builds the
+frontend and opens Atlas in your browser. Keep the terminal open and press
+Ctrl+C to stop. Python, `uv`, and Node.js/npm must already be installed. On first
+run, add your Prune key to the newly created `.env` to use Privacy mode; local
+generation also requires compatible local model assets or a loopback server.
+
+Alternatively, run the setup commands directly:
+
 ```powershell
 uv sync --python 3.12
 uv run atlas setup-models
@@ -161,3 +170,19 @@ Overview questions now request a direct definition plus a short explanation of m
 PDF soft line wraps no longer become separate sentences during compression. Blank lines remain paragraph boundaries; original source spans/offsets remain available. Unicode ligatures and CamelCase are normalized for term matching, without guessing missing font glyphs or rewriting original evidence. The compressor favors substantive passages over title fragments and reduces dense benchmark-table selection for overview questions. Existing indexed parents benefit at query time; re-uploading PDFs is not required.
 
 Citation groups such as [S1, S2] are validated and rendered as individual clickable sources. Numerical arrays remain plain text. See reports/ANSWER-QUALITY.md for measured regression checks; no broad generated-answer accuracy claim is made.
+
+## Local voice dictation and Indian-language search
+
+The microphone beside either search bar records a question locally. Click it to start, click Stop to transcribe, then review/edit the text. The arrow beside the microphone opens language settings. The document question is submitted only when you press Ask; dictated media queries wait for **Search reviewed text**. Dictation switches document questions to **Local** mode, which is also the default for the UI and API. Privacy mode remains an explicitly selectable cloud feature; selecting it later sends approved minimized text through Prune as before.
+
+Dictation uses the cached multilingual **Whisper base on CPU/int8**. It uses `getUserMedia`/`MediaRecorder`, **not** a browser speech-recognition service. Audio is posted only to the loopback Atlas backend, decoded and transcribed in a supervised local worker, then deleted with its temporary transcript file. It is not added to sources, history, Git, or the LLM audit. Submitted questions retain the existing local history/audit behavior. A browser microphone permission is required; no capture starts before you click. Cancel/unmount stops microphone tracks. Limits: 60-second recording, 8 MiB upload, one transcription worker, 90-second processing deadline. Runtime never downloads speech assets; incomplete model/tokenizer assets fail with a setup message.
+
+Use `uv run atlas setup-media` once if speech assets are missing. To reuse a better **already downloaded, multilingual CTranslate2/faster-whisper** model, set `ATLAS_SPEECH_MODEL_DIR` in `.env` to its complete local folder (weights, config, tokenizer and vocabulary) and restart Atlas. GGUF LLM files cannot serve as Whisper speech models. A larger compatible speech model still runs on CPU and may improve transcription, with additional RAM/time; that tradeoff was not benchmarked here. No new model was downloaded for this feature.
+
+Language settings offer auto-detection, English, Hindi, Bengali, Tamil, Telugu, Marathi, Gujarati, Kannada, Malayalam, Punjabi, Urdu, Assamese, Nepali, Sanskrit and Sindhi. Select a language for short utterances when auto-detection struggles. These are Whisper-supported decoding options, **not a claim of equal accuracy**. Dialects, code-switching/Hinglish, names and noisy audio can be transcribed incorrectly. Indian-language speech accuracy has not been measured in this build.
+
+Type native-script queries directly: the existing local EmbeddingGemma 2 can retrieve across languages without a translation API or new index. Indic combining marks are preserved during term matching, and the local answer prompt requests the question's language. Romanized Indian languages and mixed-language queries are best effort. Sensitive-field/table matching still relies partly on field names and local English NER; cross-language questions can miss those fields. No privacy detector was relaxed to broaden retrieval.
+
+Measured checks are in `reports/LOCAL-VOICE-AND-LANGUAGES.md` and `reports/local-voice-multilingual.json`. In the narrow native-script media sample, eight of ten Indian-language queries found the intended flower media; the Gujarati and Urdu queries missed. English, Hindi and Tamil document questions returned the expected 24-day fact from the English source. These are regression examples, not a multilingual accuracy benchmark.
+
+Media search now defaults to visual descriptions for video/images and speech for audio files. **Match content** explicitly enables video speech or all content. Matches identify their content type, use relevance gates and show one strongest timestamp per file/type. See `reports/MEDIA-SEARCH-FIX.md` for the telescope/flower regression.

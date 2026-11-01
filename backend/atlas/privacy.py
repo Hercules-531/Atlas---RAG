@@ -20,7 +20,11 @@ STOP = set('what is the a an of for to in how much many does do are was and plea
 def terms(text):
     text=unicodedata.normalize('NFKC',text)
     text=re.sub(r'(?<=[a-z0-9])(?=[A-Z])',' ',text)
-    return set(re.findall(r'[\w]+',text.lower().replace('_',' ').replace('-',' '))) - STOP
+    # Indic vowel signs/viramas are combining marks, omitted by Python's \w.
+    # Keep them attached rather than breaking native-script words into fragments.
+    words=''.join(c if c.isalnum() or unicodedata.category(c).startswith('M') else ' '
+                  for c in text.lower())
+    return set(words.split()) - STOP
 
 def luhn(text):
     digits = [int(n) for n in re.sub(r'\D','',text)]

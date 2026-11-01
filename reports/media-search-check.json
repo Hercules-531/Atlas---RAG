@@ -1,0 +1,144 @@
+{
+  "description": "Real local indexed media; heuristic relevance cutoffs, not a general accuracy benchmark. No generation calls.",
+  "cases": [
+    {
+      "query": "telescope",
+      "kind": "all",
+      "content": "auto",
+      "hits": [
+        {
+          "name": "observatory-audio.wav",
+          "location": "time 00:00:00.000 \u2013 00:00:05.840",
+          "match_type": "speech"
+        }
+      ],
+      "elapsed_seconds": 1.61
+    },
+    {
+      "query": "telescope",
+      "kind": "video",
+      "content": "auto",
+      "hits": [],
+      "elapsed_seconds": 0.239
+    },
+    {
+      "query": "telescope",
+      "kind": "all",
+      "content": "visual",
+      "hits": [],
+      "elapsed_seconds": 0.344
+    },
+    {
+      "query": "telescope",
+      "kind": "video",
+      "content": "speech",
+      "hits": [
+        {
+          "name": "observatory-video.mp4",
+          "location": "time 00:00:03.280 \u2013 00:00:06.800",
+          "match_type": "speech"
+        }
+      ],
+      "elapsed_seconds": 0.153
+    },
+    {
+      "query": "flower",
+      "kind": "all",
+      "content": "auto",
+      "hits": [
+        {
+          "name": "flower-inspection.png",
+          "location": "image 1",
+          "match_type": "visual"
+        },
+        {
+          "name": "observatory-video.mp4",
+          "location": "time 00:00:00.000",
+          "match_type": "visual"
+        }
+      ],
+      "elapsed_seconds": 0.348
+    },
+    {
+      "query": "blossom",
+      "kind": "all",
+      "content": "visual",
+      "hits": [
+        {
+          "name": "observatory-video.mp4",
+          "location": "time 00:00:00.000",
+          "match_type": "visual"
+        },
+        {
+          "name": "flower-inspection.png",
+          "location": "image 1",
+          "match_type": "visual"
+        }
+      ],
+      "elapsed_seconds": 0.337
+    },
+    {
+      "query": "a blue bloom",
+      "kind": "all",
+      "content": "visual",
+      "hits": [
+        {
+          "name": "observatory-video.mp4",
+          "location": "time 00:00:00.000",
+          "match_type": "visual"
+        },
+        {
+          "name": "flower-inspection.png",
+          "location": "image 1",
+          "match_type": "visual"
+        }
+      ],
+      "elapsed_seconds": 0.34
+    },
+    {
+      "query": "astronomy",
+      "kind": "all",
+      "content": "auto",
+      "hits": [
+        {
+          "name": "observatory-audio.wav",
+          "location": "time 00:00:00.000 \u2013 00:00:05.840",
+          "match_type": "speech"
+        }
+      ],
+      "elapsed_seconds": 0.369
+    },
+    {
+      "query": "submarine",
+      "kind": "all",
+      "content": "all",
+      "hits": [],
+      "elapsed_seconds": 0.397
+    },
+    {
+      "query": "dinosaur",
+      "kind": "all",
+      "content": "all",
+      "hits": [],
+      "elapsed_seconds": 0.411
+    },
+    {
+      "query": "project amber",
+      "kind": "all",
+      "content": "all",
+      "hits": [
+        {
+          "name": "observatory-audio.wav",
+          "location": "time 00:00:06.720 \u2013 00:00:09.088",
+          "match_type": "speech"
+        },
+        {
+          "name": "observatory-video.mp4",
+          "location": "time 00:00:06.800 \u2013 00:00:08.800",
+          "match_type": "speech"
+        }
+      ],
+      "elapsed_seconds": 0.374
+    }
+  ]
+}

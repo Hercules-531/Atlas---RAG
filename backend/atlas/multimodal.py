@@ -3,6 +3,7 @@ import base64
 import io
 import json
 import math
+import os
 import shutil
 import subprocess
 from functools import lru_cache
@@ -47,10 +48,17 @@ def caption(path,session):
         'local',session,feature='local-media-caption',images=[encoded])
     return result['answer']
 
+def speech_path():
+    return Path(os.getenv('ATLAS_SPEECH_MODEL_DIR') or DATA/'models/whisper-base').expanduser().resolve()
+
+def speech_ready():
+    path=speech_path()
+    return all((path/name).is_file() for name in ('model.bin','config.json','tokenizer.json')) and any((path/name).is_file() for name in ('vocabulary.txt','vocabulary.json'))
+
 @lru_cache
 def speech_model():
-    path=DATA/'models/whisper-base'
-    if not (path/'model.bin').exists():raise ValueError('Local speech model missing. Run uv run atlas setup-media, then retry indexing.')
+    path=speech_path()
+    if not speech_ready():raise ValueError('Complete local speech model missing (weights, tokenizer, config, vocabulary). Run uv run atlas setup-media, then retry.')
     from faster_whisper import WhisperModel
     return WhisperModel(str(path),device='cpu',compute_type='int8',local_files_only=True)
 

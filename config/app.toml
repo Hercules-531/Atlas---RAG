@@ -13,3 +13,6 @@ max_source_image_pixels = 20000000
 max_source_image_mib = 24
 max_media_seconds = 900
 max_video_frames = 8
+max_dictation_seconds = 60
+max_dictation_mib = 8
+dictation_timeout_seconds = 90
