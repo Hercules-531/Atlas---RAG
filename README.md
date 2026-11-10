@@ -2,6 +2,37 @@
 
 **Minimum necessary, with proof.** Ask questions across local PDF, DOCX, TXT, MD, CSV, XLSX and JSON documents. EmbeddingGemma 2 generates embeddings locally; embedded persistent Chroma plus SQLite BM25 provide local hybrid retrieval. Sentence-aware children retrieve bounded parents, and a local semantic extractive compressor selects evidence before the privacy pipeline. Inspect exactly what the application sends through Prune, and what it withholds.
 
+## Working prototype
+
+Screenshots captured from prototype sessions using demo sources. Backgrounds reflect the version shown.
+
+### Document answers with source evidence
+
+![Atlas answering a question from a synthetic observatory PDF, with a page citation and the original chart](reports/atlas-source-image-desktop.png)
+
+The demo answer cites the source PDF and shows its original chart. Embedded-document previews are displayed locally; this example does not demonstrate image understanding by the answer model.
+
+### Privacy-mode workspace
+
+![Atlas Privacy-mode workspace with the night-sky background and 13 documents ready](reports/privacy-video-only.png)
+
+The Privacy-mode start screen, with documents indexed for local retrieval.
+
+<details>
+<summary>See media search and the mobile layout</summary>
+
+### Search spoken words in a video
+
+![Atlas media search finding the word telescope in a demo video's speech transcript](reports/media-search-spoken-match.png)
+
+This result matches the video's transcript. A speech match does not establish that the matched object appears in the video frames.
+
+### Cited answers on mobile
+
+<img src="reports/atlas-source-image-mobile.png" alt="Atlas mobile answer showing the June telescope-session count, citation, and synthetic source chart" width="360">
+
+</details>
+
 ## Run on this machine
 
 In VS Code, open **`run.py`** in the project root and click **Run Python File**.
